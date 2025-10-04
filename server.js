@@ -927,6 +927,40 @@ app.post('/api/health-metrics', authMiddleware, (req, res) => {
   }
 });
 
+// Autofill proxy endpoint
+app.get('/api/autofill/:userType', authMiddleware, async (req, res) => {
+  try {
+    const { userType } = req.params;
+
+    console.log('Autofill request - User ID:', req.user.id, 'UserType:', userType);
+
+    // Only allow for specific user
+    if (req.user.id !== '31b36bb6-9601-4ef9-b669-900176e942fc') {
+      console.log('Autofill denied - User ID mismatch:', req.user.id, 'Expected:', '31b36bb6-9601-4ef9-b669-900176e942fc');
+      return res.status(403).json({ error: 'Autofill not available for this user' });
+    }
+
+    // Import fetch dynamically for Node.js
+    const fetch = (await import('node-fetch')).default;
+
+    const response = await fetch(`https://web-production-10c3.up.railway.app/autofill/${userType}`, {
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`External API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Autofill proxy error:', error);
+    res.status(500).json({ error: 'Failed to fetch autofill data', details: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`✓ Server running on http://localhost:${PORT}`);
 });

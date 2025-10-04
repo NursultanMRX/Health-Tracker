@@ -29,6 +29,30 @@ type Props = {
 
 const API_URL = 'http://localhost:3001/api';
 
+// Translation helper for ML API responses
+const translateRiskLevel = (level: string): string => {
+  const translations: { [key: string]: string } = {
+    'Past': 'Low',
+    'O\'rta': 'Medium',
+    'Yuqori': 'High',
+  };
+  return translations[level] || level;
+};
+
+const translateRecommendation = (recommendation: string): string => {
+  const translations: { [key: string]: string } = {
+    "Sizning diabet riskingiz past. Sog'lom turmush tarzini davom ettiring!":
+      "Your diabetes risk is low. Continue maintaining a healthy lifestyle!",
+    "Sizning diabet riskingiz o'rtacha. Shifokor bilan maslahatlashing va ovqatlanishni nazorat qiling.":
+      "Your diabetes risk is moderate. Consult with a doctor and monitor your diet carefully.",
+    "Sizning diabet riskingiz yuqori! Zudlik bilan shifokorga murojaat qiling.":
+      "Your diabetes risk is high! Please consult a doctor immediately.",
+    "Sizning diabet riskingiz yuqori! Zudlik bilan shifokorga murojaat qiling va to'liq tekshiruvdan o'ting.":
+      "Your diabetes risk is high! Please consult a doctor immediately and get a complete checkup.",
+  };
+  return translations[recommendation] || recommendation;
+};
+
 export default function PatientDetailView({ patient, onBack }: Props) {
   const [readings, setReadings] = useState<GlucoseReading[]>([]);
   const [days, setDays] = useState(30);
@@ -200,11 +224,11 @@ export default function PatientDetailView({ patient, onBack }: Props) {
                 </div>
                 <div>
                   <p className="text-sm text-purple-700 mb-1">Risk Level</p>
-                  <p className="text-2xl font-bold text-purple-900">{latestRisk.risk_level}</p>
+                  <p className="text-2xl font-bold text-purple-900">{translateRiskLevel(latestRisk.risk_level)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-purple-700 mb-1">Recommendation</p>
-                  <p className="text-sm text-purple-900 italic">{latestRisk.recommendation}</p>
+                  <p className="text-sm text-purple-900 italic">{translateRecommendation(latestRisk.recommendation)}</p>
                 </div>
               </div>
             </div>

@@ -17,6 +17,30 @@ import GlucoseChart from './GlucoseChart';
 
 type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'health_metrics' | 'settings' | null;
 
+// Translation helper for ML API responses
+const translateRiskLevel = (level: string): string => {
+  const translations: { [key: string]: string } = {
+    'Past': 'Low',
+    'O\'rta': 'Medium',
+    'Yuqori': 'High',
+  };
+  return translations[level] || level;
+};
+
+const translateRecommendation = (recommendation: string): string => {
+  const translations: { [key: string]: string } = {
+    "Sizning diabet riskingiz past. Sog'lom turmush tarzini davom ettiring!":
+      "Your diabetes risk is low. Continue maintaining a healthy lifestyle!",
+    "Sizning diabet riskingiz o'rtacha. Shifokor bilan maslahatlashing va ovqatlanishni nazorat qiling.":
+      "Your diabetes risk is moderate. Consult with a doctor and monitor your diet carefully.",
+    "Sizning diabet riskingiz yuqori! Zudlik bilan shifokorga murojaat qiling.":
+      "Your diabetes risk is high! Please consult a doctor immediately.",
+    "Sizning diabet riskingiz yuqori! Zudlik bilan shifokorga murojaat qiling va to'liq tekshiruvdan o'ting.":
+      "Your diabetes risk is high! Please consult a doctor immediately and get a complete checkup.",
+  };
+  return translations[recommendation] || recommendation;
+};
+
 export default function PatientDashboard() {
   const { user, profile, signOut } = useAuth();
   const { settings } = useSettings();
@@ -295,8 +319,8 @@ export default function PatientDashboard() {
                   <div>
                     <h3 className="text-lg font-semibold text-purple-900 mb-2">Diabetes Risk Assessment</h3>
                     <p className="text-4xl font-bold text-purple-700">{latestRisk.risk_percentage}</p>
-                    <p className="text-sm text-purple-600 mt-1">Risk Level: <span className="font-semibold">{latestRisk.risk_level}</span></p>
-                    <p className="text-sm text-purple-600 mt-3 italic">{latestRisk.recommendation}</p>
+                    <p className="text-sm text-purple-600 mt-1">Risk Level: <span className="font-semibold">{translateRiskLevel(latestRisk.risk_level)}</span></p>
+                    <p className="text-sm text-purple-600 mt-3 italic">{translateRecommendation(latestRisk.recommendation)}</p>
                   </div>
                   <div className="flex flex-col items-center justify-center w-24 h-24 bg-white/50 rounded-full backdrop-blur-sm">
                     <Shield className="w-12 h-12 text-purple-600" />

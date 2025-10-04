@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, Brain } from 'lucide-react';
 
@@ -29,6 +29,127 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
   });
   const [loading, setLoading] = useState(false);
 
+  // Auto-fetch tracked data from Railway API on mount
+  useEffect(() => {
+    const fetchTrackedData = async () => {
+      // Only autofill for user with ID: 81f74fc9-6571-4e78-8d89-1695bf90b15d
+      if (user?.id !== '31b36bb6-9601-4ef9-b669-900176e942fc') {
+        return;
+      }
+
+      try {
+        // Use proxy endpoint through our backend to avoid CORS issues
+        const response = await fetch('http://localhost:3001/api/autofill/user_B', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          },
+        });
+
+        if (!response.ok) {
+          console.warn('Failed to fetch tracked data:', response.status);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('Auto-filled tracked data:', data);
+
+        // Map the API response to form fields
+        // Clean up any trailing commas or whitespace
+        const cleanString = (str: string) => str?.toString().replace(/,\s*$/, '').trim();
+
+        setFormData(prev => ({
+          ...prev,
+          exercise_level: (cleanString(data.exercise_level) || prev.exercise_level) as 'Low' | 'Moderate' | 'High',
+          sleep_hours: data.sleep_hours?.toString() || prev.sleep_hours,
+          stress_level: (cleanString(data.stress_level) || prev.stress_level) as 'Low' | 'Moderate' | 'High',
+          screen_time_per_day_hours: data.screen_time_per_day_hours?.toString() || prev.screen_time_per_day_hours,
+        }));
+      } catch (error) {
+        console.error('Error auto-filling tracked data:', error);
+      }
+    };
+
+    fetchTrackedData();
+  }, [user?.id]);
+
+  // Fetch last HbA1c level and other data from database
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      if (!user?.id) return;
+
+      try {
+        // Fetch last health metrics for HbA1c
+        const metricsResponse = await fetch(`http://localhost:3001/api/health-metrics?patient_id=${user.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          },
+        });
+
+        if (metricsResponse.ok) {
+          const metrics = await metricsResponse.json();
+          // Get the most recent record (already sorted by timestamp DESC on backend)
+          if (metrics.length > 0 && metrics[0].hba1c_level) {
+            setFormData(prev => ({
+              ...prev,
+              hba1c_level: metrics[0].hba1c_level.toString(),
+            }));
+            console.log('Auto-filled last HbA1c level:', metrics[0].hba1c_level);
+          }
+        }
+
+        // Fetch onboarding data for age, bmi, gender
+        const onboardingResponse = await fetch(`http://localhost:3001/api/onboarding/${user.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+          },
+        });
+
+        if (onboardingResponse.ok) {
+          const onboarding = await onboardingResponse.json();
+
+          // Calculate age from date_of_birth
+          let age = '';
+          if (onboarding.date_of_birth) {
+            const birthDate = new Date(onboarding.date_of_birth);
+            const today = new Date();
+            const calculatedAge = today.getFullYear() - birthDate.getFullYear();
+            age = calculatedAge.toString();
+          }
+
+          // Calculate BMI from height and weight
+          let bmi = '';
+          if (onboarding.height_cm && onboarding.weight_kg) {
+            const heightInMeters = onboarding.height_cm / 100;
+            const calculatedBmi = onboarding.weight_kg / (heightInMeters * heightInMeters);
+            bmi = calculatedBmi.toFixed(1);
+          }
+
+          // Set gender
+          let gender = onboarding.gender || 'Female';
+          // Capitalize first letter to match form options
+          if (gender === 'male') gender = 'Male';
+          if (gender === 'female') gender = 'Female';
+
+          setFormData(prev => ({
+            ...prev,
+            age,
+            bmi,
+            gender: gender as 'Male' | 'Female' | 'Other',
+          }));
+
+          console.log('Auto-filled from onboarding:', { age, bmi, gender });
+        }
+      } catch (error) {
+        console.error('Error fetching patient data:', error);
+      }
+    };
+
+    fetchPatientData();
+  }, [user?.id]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -43,7 +164,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
         sleep_hours: formData.sleep_hours ? parseFloat(formData.sleep_hours) : 0,
         stress_level: formData.stress_level,
         mental_health_condition: formData.mental_health_condition,
-        work_hours_per_week: formData.work_hours_per_week ? parseFloat(formData.work_hours_per_week) : 0,
+        work_hours_per_week: formData.work_hours_per_week ? Math.round(parseFloat(formData.work_hours_per_week)) : 0,
         screen_time_per_day_hours: formData.screen_time_per_day_hours ? parseFloat(formData.screen_time_per_day_hours) : 0,
         social_interaction_score: formData.social_interaction_score ? parseFloat(formData.social_interaction_score) : 0,
         happiness_score: formData.happiness_score ? parseFloat(formData.happiness_score) : 0,
@@ -63,7 +184,9 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
       };
 
       try {
-        const mlResponse = await fetch('https://a44f2bd3696a.ngrok-free.app/predict', {
+        console.log('Sending to ML API:', predictionData);
+
+        const mlResponse = await fetch('https://mlserver-production.up.railway.app/predict', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -76,10 +199,13 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           predictionResult = await mlResponse.json();
           console.log('ML Prediction:', predictionResult);
         } else {
-          console.warn('ML prediction failed, continuing without risk assessment');
+          const errorText = await mlResponse.text();
+          console.error('ML prediction failed:', mlResponse.status, errorText);
+          console.warn('Continuing without risk assessment');
         }
       } catch (mlError) {
-        console.warn('ML API unavailable, continuing without risk assessment:', mlError);
+        console.error('ML API error:', mlError);
+        console.warn('Continuing without risk assessment');
       }
 
       // Save to database with prediction results
