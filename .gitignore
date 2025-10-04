@@ -24,3 +24,14 @@ dist-ssr
 
 .claude/
 /.cursor
+
+# Documentation and test files
+*.md
+README.md
+test_*.sh
+add-*.js
+generate-*.js
+generate-*.cjs
+health_tracker.db
+diabetes.db-shm
+diabetes.db-wal
