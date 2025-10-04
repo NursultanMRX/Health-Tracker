@@ -43,7 +43,12 @@ export default function DoctorDashboard() {
 
       if (!response.ok) throw new Error('Failed to load patients');
 
-      const patientsData = await response.json();
+      const allPatientsData = await response.json();
+
+      // Filter patients: only show those assigned to this doctor
+      const patientsData = allPatientsData.filter((patient: any) =>
+        patient.assigned_doctor_id === profile?.id
+      );
 
       // Load clinical alerts
       const alertsResponse = await fetch('http://localhost:3001/api/clinical-alerts?status=active', {

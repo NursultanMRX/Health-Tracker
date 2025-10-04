@@ -18,11 +18,11 @@ function getHeaders() {
 
 // Auth APIs
 export const auth = {
-  signUp: async ({ email, password }: { email: string; password: string }, fullName: string, role: string, age?: string, gender?: string) => {
+  signUp: async ({ email, password }: { email: string; password: string }, fullName: string, role: string, age?: string, gender?: string, assignedDoctorId?: string) => {
     const response = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, fullName, role, age, gender }),
+      body: JSON.stringify({ email, password, fullName, role, age, gender, assignedDoctorId }),
     });
 
     const data = await response.json();

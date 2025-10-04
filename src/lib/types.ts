@@ -8,6 +8,7 @@ export type Profile = {
   sex?: 'male' | 'female';
   clinic_location?: string;
   primary_care_physician_id?: string;
+  assigned_doctor_id?: string;
   is_profile_complete?: boolean; // Backend-driven flag for onboarding completion
   created_at: string;
   updated_at: string;

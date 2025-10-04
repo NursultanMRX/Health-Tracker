@@ -259,16 +259,18 @@ export default function PatientDashboard() {
             >
               Dashboard
             </button>
-            <button
-              onClick={() => setActiveView('charts')}
-              className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
-                activeView === 'charts'
-                  ? 'bg-blue-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              Charts
-            </button>
+            {!profile?.assigned_doctor_id && (
+              <button
+                onClick={() => setActiveView('charts')}
+                className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
+                  activeView === 'charts'
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Charts
+              </button>
+            )}
             <button
               onClick={() => setActiveView('log')}
               className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
@@ -441,7 +443,7 @@ export default function PatientDashboard() {
 
         {activeView === 'log' && <DailyLogList onUpdate={loadReadings} />}
 
-        {activeView === 'charts' && <GlucoseChart />}
+        {activeView === 'charts' && !profile?.assigned_doctor_id && <GlucoseChart />}
       </main>
 
       {activeModal === 'glucose' && (

@@ -13,7 +13,7 @@ type AuthContextType = {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
-  signUp: (email: string, password: string, fullName: string, role: 'patient' | 'doctor', age?: string, gender?: 'male' | 'female') => Promise<void>;
+  signUp: (email: string, password: string, fullName: string, role: 'patient' | 'doctor', age?: string, gender?: 'male' | 'female', assignedDoctorId?: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   updateProfileCompletion: () => Promise<void>; // Mark profile as complete after onboarding
@@ -89,13 +89,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const signUp = async (email: string, password: string, fullName: string, role: 'patient' | 'doctor', age?: string, gender?: 'male' | 'female') => {
+  const signUp = async (email: string, password: string, fullName: string, role: 'patient' | 'doctor', age?: string, gender?: 'male' | 'female', assignedDoctorId?: string) => {
     const { error } = await sqliteClient.auth.signUp(
       { email, password },
       fullName,
       role,
       age,
-      gender
+      gender,
+      assignedDoctorId
     );
 
     if (error) throw error;

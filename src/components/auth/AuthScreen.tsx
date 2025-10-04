@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Activity } from 'lucide-react';
 
@@ -8,11 +8,30 @@ export default function AuthScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
-  const [age, setAge] = useState('');
-  const [gender, setGender] = useState<'male' | 'female'>('male');
   const [role, setRole] = useState<'patient' | 'doctor'>('patient');
+  const [assignedDoctorId, setAssignedDoctorId] = useState<string>('');
+  const [doctors, setDoctors] = useState<Array<{ id: string; full_name: string; email: string }>>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Load doctors when signing up as a patient
+  useEffect(() => {
+    if (isSignUp && role === 'patient') {
+      loadDoctors();
+    }
+  }, [isSignUp, role]);
+
+  const loadDoctors = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/doctors');
+      if (response.ok) {
+        const data = await response.json();
+        setDoctors(data);
+      }
+    } catch (error) {
+      console.error('Error loading doctors:', error);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +40,7 @@ export default function AuthScreen() {
 
     try {
       if (isSignUp) {
-        await signUp(email, password, fullName, role, age, gender);
+        await signUp(email, password, fullName, role, undefined, undefined, assignedDoctorId || undefined);
       } else {
         await signIn(email, password);
       }
@@ -116,56 +135,29 @@ export default function AuthScreen() {
                 </div>
 
                 {role === 'patient' && (
-                  <>
-                    <div>
-                      <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
-                        Age
-                      </label>
-                      <input
-                        id="age"
-                        type="number"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
-                        placeholder="25"
-                        required
-                        min="1"
-                        max="120"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                      <div className="flex gap-3">
-                        <label className="flex-1">
-                          <input
-                            type="radio"
-                            name="gender"
-                            value="male"
-                            checked={gender === 'male'}
-                            onChange={() => setGender('male')}
-                            className="sr-only peer"
-                          />
-                          <div className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-gray-400 transition-colors">
-                            Male
-                          </div>
-                        </label>
-                        <label className="flex-1">
-                          <input
-                            type="radio"
-                            name="gender"
-                            value="female"
-                            checked={gender === 'female'}
-                            onChange={() => setGender('female')}
-                            className="sr-only peer"
-                          />
-                          <div className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-gray-400 transition-colors">
-                            Female
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </>
+                  <div>
+                    <label htmlFor="doctor" className="block text-sm font-medium text-gray-700 mb-1">
+                      Select a Doctor (Optional)
+                    </label>
+                    <select
+                      id="doctor"
+                      value={assignedDoctorId}
+                      onChange={(e) => setAssignedDoctorId(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base bg-white"
+                    >
+                      <option value="">Proceed on my own</option>
+                      {doctors.map((doctor) => (
+                        <option key={doctor.id} value={doctor.id}>
+                          {doctor.full_name} - {doctor.email}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {assignedDoctorId
+                        ? 'Charts will be visible to your selected doctor'
+                        : 'Charts will only be visible to you'}
+                    </p>
+                  </div>
                 )}
               </>
             )}

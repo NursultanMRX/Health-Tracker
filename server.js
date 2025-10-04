@@ -192,6 +192,14 @@ try {
   // Column already exists, ignore error
 }
 
+// Add assigned_doctor_id column if it doesn't exist (migration)
+try {
+  db.exec(`ALTER TABLE profiles ADD COLUMN assigned_doctor_id TEXT REFERENCES profiles(id)`);
+  console.log('✓ Added assigned_doctor_id column');
+} catch (error) {
+  // Column already exists, ignore error
+}
+
 // Helper functions
 const sqliteToBoolean = (value) => value === 1;
 const booleanToSqlite = (value) => value ? 1 : 0;
@@ -227,7 +235,7 @@ function authMiddleware(req, res, next) {
 
 // Auth routes
 app.post('/api/auth/signup', async (req, res) => {
-  const { email, password, fullName, role, age, gender } = req.body;
+  const { email, password, fullName, role, age, gender, assignedDoctorId } = req.body;
 
   try {
     const userId = uuidv4();
@@ -237,6 +245,7 @@ app.post('/api/auth/signup', async (req, res) => {
     const columns = db.prepare(`PRAGMA table_info(profiles)`).all();
     const hasAgeColumn = columns.some(col => col.name === 'age');
     const hasSexColumn = columns.some(col => col.name === 'sex');
+    const hasAssignedDoctorIdColumn = columns.some(col => col.name === 'assigned_doctor_id');
 
     // Build the INSERT query dynamically based on available columns and data
     let insertQuery = 'INSERT INTO profiles (id, email, password_hash, full_name, role';
@@ -254,6 +263,13 @@ app.post('/api/auth/signup', async (req, res) => {
     if (hasSexColumn && gender && role === 'patient') {
       insertQuery += ', sex';
       values.push(gender);
+      placeholders.push('?');
+    }
+
+    // Add assigned_doctor_id if column exists and assignedDoctorId is provided (and role is patient)
+    if (hasAssignedDoctorIdColumn && assignedDoctorId && role === 'patient') {
+      insertQuery += ', assigned_doctor_id';
+      values.push(assignedDoctorId);
       placeholders.push('?');
     }
 
@@ -342,7 +358,7 @@ app.get('/api/auth/session', authMiddleware, (req, res) => {
 app.get('/api/profiles', authMiddleware, (req, res) => {
   const { role } = req.query;
 
-  let query = 'SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, created_at, updated_at FROM profiles';
+  let query = 'SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, assigned_doctor_id, created_at, updated_at FROM profiles';
   const params = [];
 
   if (role) {
@@ -358,7 +374,7 @@ app.get('/api/profiles', authMiddleware, (req, res) => {
 
 app.get('/api/profiles/:id', authMiddleware, (req, res) => {
   const profile = db.prepare(`
-    SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, is_profile_complete, created_at, updated_at
+    SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, assigned_doctor_id, is_profile_complete, created_at, updated_at
     FROM profiles
     WHERE id = ?
   `).get(req.params.id);
@@ -396,12 +412,28 @@ app.patch('/api/profiles/:id', authMiddleware, (req, res) => {
 
     // Return updated profile
     const profile = db.prepare(`
-      SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, is_profile_complete, created_at, updated_at
+      SELECT id, email, full_name, role, date_of_birth, sex, clinic_location, assigned_doctor_id, is_profile_complete, created_at, updated_at
       FROM profiles
       WHERE id = ?
     `).get(id);
 
     res.json(profile);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get list of doctors for patient registration
+app.get('/api/doctors', (req, res) => {
+  try {
+    const doctors = db.prepare(`
+      SELECT id, full_name, email, clinic_location
+      FROM profiles
+      WHERE role = 'doctor'
+      ORDER BY full_name ASC
+    `).all();
+
+    res.json(doctors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
