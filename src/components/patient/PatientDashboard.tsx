@@ -45,7 +45,7 @@ export default function PatientDashboard() {
 
       if (response.ok) {
         const metrics = await response.json();
-        if (metrics.length > 0 && metrics[0].risk_percentage) {
+        if (metrics.length > 0 &&& metrics[0].risk_percentage) {
           setLatestRisk(metrics[0]);
         }
       }
