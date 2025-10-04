@@ -110,3 +110,26 @@ export type ClinicalAlert = {
   status: 'active' | 'acknowledged' | 'snoozed' | 'resolved';
   created_at: string;
 };
+
+export type HealthMetric = {
+  id: string;
+  patient_id: string;
+  timestamp: string;
+  age: number;
+  gender: 'Male' | 'Female' | 'Other';
+  exercise_level: 'Low' | 'Moderate' | 'High';
+  diet_type: 'Vegetarian' | 'Vegan' | 'Balanced' | 'Junk Food' | 'Keto';
+  sleep_hours: number;
+  stress_level: 'Low' | 'Moderate' | 'High';
+  mental_health_condition: string;
+  work_hours_per_week: number;
+  screen_time_per_day_hours: number;
+  social_interaction_score: number;
+  happiness_score: number;
+  bmi: number;
+  hypertension: number;
+  heart_disease: number;
+  hba1c_level: number;
+  blood_glucose_level: number;
+  created_at: string;
+};

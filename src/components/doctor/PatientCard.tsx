@@ -10,6 +10,7 @@ type PatientWithMetrics = Profile & {
   glucoseTrend?: 'up' | 'down' | 'stable';
   timeInRange?: number;
   glucoseReadings?: GlucoseReading[];
+  diabetesRisk?: string;
 };
 
 interface PatientCardProps {
@@ -85,6 +86,12 @@ export default function PatientCard({ patient, onClick, viewMode = 'grid' }: Pat
 
         {/* Metrics - Compact for list view */}
         <div className="flex items-center gap-6">
+          {patient.diabetesRisk && (
+            <div className="text-center">
+              <p className="text-xs text-gray-500 mb-1">Diabetes Risk</p>
+              <p className="text-xl font-bold text-purple-600">{patient.diabetesRisk}</p>
+            </div>
+          )}
           {patient.hasData && patient.latestGlucose && (
             <>
               {/* Current Glucose */}

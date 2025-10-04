@@ -147,7 +147,35 @@ function initializeDatabase() {
       updated_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS health_metrics (
+      id TEXT PRIMARY KEY,
+      patient_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+      timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+      age INTEGER,
+      gender TEXT CHECK (gender IN ('Male', 'Female', 'Other')),
+      exercise_level TEXT CHECK (exercise_level IN ('Low', 'Moderate', 'High')),
+      diet_type TEXT CHECK (diet_type IN ('Vegetarian', 'Vegan', 'Balanced', 'Junk Food', 'Keto')),
+      sleep_hours REAL,
+      stress_level TEXT CHECK (stress_level IN ('Low', 'Moderate', 'High')),
+      mental_health_condition TEXT,
+      work_hours_per_week REAL,
+      screen_time_per_day_hours REAL,
+      social_interaction_score REAL,
+      happiness_score REAL,
+      bmi REAL,
+      hypertension INTEGER DEFAULT 0,
+      heart_disease INTEGER DEFAULT 0,
+      hba1c_level REAL,
+      blood_glucose_level INTEGER,
+      risk_probability REAL,
+      risk_percentage TEXT,
+      risk_level TEXT,
+      recommendation TEXT,
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
     CREATE INDEX IF NOT EXISTS idx_glucose_readings_patient_timestamp ON glucose_readings(patient_id, timestamp DESC);
+    CREATE INDEX IF NOT EXISTS idx_health_metrics_patient_timestamp ON health_metrics(patient_id, timestamp DESC);
     CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
   `);
 
@@ -763,6 +791,104 @@ app.get('/api/onboarding/:patientId', authMiddleware, (req, res) => {
     };
 
     res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Health metrics routes
+app.get('/api/health-metrics', authMiddleware, (req, res) => {
+  const { patient_id, start_date, end_date } = req.query;
+
+  let query = 'SELECT * FROM health_metrics WHERE 1=1';
+  const params = [];
+
+  if (patient_id) {
+    query += ' AND patient_id = ?';
+    params.push(patient_id);
+  }
+
+  if (start_date) {
+    query += ' AND timestamp >= ?';
+    params.push(start_date);
+  }
+
+  if (end_date) {
+    query += ' AND timestamp <= ?';
+    params.push(end_date);
+  }
+
+  query += ' ORDER BY timestamp DESC';
+
+  const metrics = db.prepare(query).all(...params);
+  res.json(metrics);
+});
+
+app.post('/api/health-metrics', authMiddleware, (req, res) => {
+  const {
+    patient_id,
+    age,
+    gender,
+    exercise_level,
+    diet_type,
+    sleep_hours,
+    stress_level,
+    mental_health_condition,
+    work_hours_per_week,
+    screen_time_per_day_hours,
+    social_interaction_score,
+    happiness_score,
+    bmi,
+    hypertension,
+    heart_disease,
+    hba1c_level,
+    blood_glucose_level,
+    risk_probability,
+    risk_percentage,
+    risk_level,
+    recommendation,
+    timestamp
+  } = req.body;
+
+  try {
+    const id = uuidv4();
+    db.prepare(`
+      INSERT INTO health_metrics (
+        id, patient_id, age, gender, exercise_level, diet_type, sleep_hours, stress_level,
+        mental_health_condition, work_hours_per_week, screen_time_per_day_hours,
+        social_interaction_score, happiness_score, bmi, hypertension, heart_disease,
+        hba1c_level, blood_glucose_level, risk_probability, risk_percentage, risk_level,
+        recommendation, timestamp
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      id,
+      patient_id,
+      parseInt(age) || null,
+      gender,
+      exercise_level,
+      diet_type,
+      parseFloat(sleep_hours) || null,
+      stress_level,
+      mental_health_condition || 'None',
+      parseFloat(work_hours_per_week) || null,
+      parseFloat(screen_time_per_day_hours) || null,
+      parseFloat(social_interaction_score) || null,
+      parseFloat(happiness_score) || null,
+      parseFloat(bmi) || null,
+      booleanToSqlite(hypertension),
+      booleanToSqlite(heart_disease),
+      parseFloat(hba1c_level) || null,
+      parseInt(blood_glucose_level) || null,
+      parseFloat(risk_probability) || null,
+      risk_percentage || null,
+      risk_level || null,
+      recommendation || null,
+      timestamp || new Date().toISOString()
+    );
+
+    const newMetric = db.prepare('SELECT * FROM health_metrics WHERE id = ?').get(id);
+    res.json(newMetric);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

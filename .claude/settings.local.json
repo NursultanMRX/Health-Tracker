@@ -8,7 +8,11 @@
       "Bash(npm install:*)",
       "Bash(curl:*)",
       "Bash(sqlite3:*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(npx tsc:*)",
+      "Bash(pkill:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,6 +5,7 @@ import { useSettings } from '../../contexts/SettingsContext';
 import { calculateTIR, calculateAverage, getDaysAgo, formatDate } from '../../lib/utils';
 import { TrendingUp, Calendar } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Legend } from 'recharts';
+import HealthMetricsCharts from './HealthMetricsCharts';
 
 export default function PatientCharts() {
   const { user } = useAuth();
@@ -12,6 +13,7 @@ export default function PatientCharts() {
   const [readings, setReadings] = useState<GlucoseReading[]>([]);
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<'glucose' | 'health'>('glucose');
 
   useEffect(() => {
     loadReadings();
@@ -82,23 +84,56 @@ export default function PatientCharts() {
 
   return (
     <div className="space-y-6">
+      {/* Tab Switcher */}
+      <div className="flex items-center justify-between">
+        <div className="flex gap-2">
+          <button
+            onClick={() => setActiveTab('glucose')}
+            className={`px-6 py-2.5 rounded-lg font-medium transition-colors ${
+              activeTab === 'glucose'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Glucose Charts
+          </button>
+          <button
+            onClick={() => setActiveTab('health')}
+            className={`px-6 py-2.5 rounded-lg font-medium transition-colors ${
+              activeTab === 'health'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Health Metrics
+          </button>
+        </div>
+
+        {activeTab === 'glucose' && (
+          <div className="flex gap-2">
+            {[7, 14, 30].map((d) => (
+              <button
+                key={d}
+                onClick={() => setDays(d)}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  days === d
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {d}d
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {activeTab === 'health' && <HealthMetricsCharts />}
+
+      {activeTab === 'glucose' && (
+        <>
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">My Glucose</h2>
-        <div className="flex gap-2">
-          {[7, 14, 30].map((d) => (
-            <button
-              key={d}
-              onClick={() => setDays(d)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                days === d
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {d}d
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
@@ -255,6 +290,8 @@ export default function PatientCharts() {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

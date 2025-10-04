@@ -14,6 +14,7 @@ type PatientWithAlerts = Profile & {
   glucoseTrend?: 'up' | 'down' | 'stable';
   timeInRange?: number;
   glucoseReadings?: GlucoseReading[];
+  diabetesRisk?: string;
 };
 
 type SortOption = 'critical_first' | 'stable_first' | 'recent_first' | 'oldest_first';
@@ -68,10 +69,27 @@ export default function DoctorDashboard() {
             );
             const glucoseData = glucoseResponse.ok ? await glucoseResponse.json() : [];
 
+            // Fetch health metrics data to get diabetes risk
+            const healthMetricsResponse = await fetch(
+              `http://localhost:3001/api/health-metrics?patient_id=${patient.id}`,
+              {
+                headers: {
+                  'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+                },
+              }
+            );
+            const healthMetricsData = healthMetricsResponse.ok ? await healthMetricsResponse.json() : [];
+
             // Sort glucose readings by timestamp (newest first)
             const sortedReadings = (glucoseData || []).sort((a: GlucoseReading, b: GlucoseReading) =>
               new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
             );
+
+            // Get latest health metric with risk data (sorted by timestamp)
+            const sortedHealthMetrics = (healthMetricsData || []).sort((a: any, b: any) =>
+              new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+            );
+            const latestHealthMetric = sortedHealthMetrics[0];
 
             // Calculate latest glucose and trend
             const latestReading = sortedReadings[0];
@@ -106,6 +124,7 @@ export default function DoctorDashboard() {
               glucoseTrend,
               timeInRange,
               glucoseReadings: recentReadings.slice(0, 100), // Last 100 readings for chart
+              diabetesRisk: latestHealthMetric?.risk_percentage,
             };
           } catch {
             return {

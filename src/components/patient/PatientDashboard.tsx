@@ -9,12 +9,13 @@ import AddMealModal from './modals/AddMealModal';
 import AddActivityModal from './modals/AddActivityModal';
 import AddMedicationModal from './modals/AddMedicationModal';
 import AddFeelingModal from './modals/AddFeelingModal';
+import AddHealthMetricsModal from './modals/AddHealthMetricsModal';
 import DailyLogList from './DailyLogList';
 import PatientCharts from './PatientCharts';
 import PatientSettings from './PatientSettings';
 import GlucoseChart from './GlucoseChart';
 
-type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'settings' | null;
+type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'health_metrics' | 'settings' | null;
 
 export default function PatientDashboard() {
   const { user, profile, signOut } = useAuth();
@@ -25,12 +26,33 @@ export default function PatientDashboard() {
   const [loading, setLoading] = useState(true);
   const [selectedMealType, setSelectedMealType] = useState<string>('breakfast');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [latestRisk, setLatestRisk] = useState<any>(null);
 
   useEffect(() => {
     if (user) {
       loadReadings();
+      loadLatestRisk();
     }
   }, [user]);
+
+  const loadLatestRisk = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/health-metrics?patient_id=${user?.id}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
+        },
+      });
+
+      if (response.ok) {
+        const metrics = await response.json();
+        if (metrics.length > 0 && metrics[0].risk_percentage) {
+          setLatestRisk(metrics[0]);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading risk data:', error);
+    }
+  };
 
   // Close profile menu when clicking outside
   useEffect(() => {
@@ -73,6 +95,7 @@ export default function PatientDashboard() {
 
   const handleAddEntry = () => {
     loadReadings();
+    loadLatestRisk();
     setActiveModal(null);
   };
 
@@ -263,6 +286,23 @@ export default function PatientDashboard() {
       <main className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
         {activeView === 'dashboard' && (
           <div className="space-y-8">
+            {/* Diabetes Risk Assessment */}
+            {latestRisk && (
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 shadow-sm border border-purple-200 mb-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-purple-900 mb-2">Diabetes Risk Assessment</h3>
+                    <p className="text-4xl font-bold text-purple-700">{latestRisk.risk_percentage}</p>
+                    <p className="text-sm text-purple-600 mt-1">Risk Level: <span className="font-semibold">{latestRisk.risk_level}</span></p>
+                    <p className="text-sm text-purple-600 mt-3 italic">{latestRisk.recommendation}</p>
+                  </div>
+                  <div className="flex flex-col items-center justify-center w-24 h-24 bg-white/50 rounded-full backdrop-blur-sm">
+                    <Shield className="w-12 h-12 text-purple-600" />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Summary Section - Simple cards with key metrics */}
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-4">Your Health Summary</h2>
@@ -317,6 +357,15 @@ export default function PatientDashboard() {
             {/* Input Area - Simple, user-friendly form/buttons to log new data */}
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-4">Log Your Data</h2>
+
+              {/* Comprehensive Health Metrics Button - Primary action */}
+              <button
+                onClick={() => setActiveModal('health_metrics')}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl p-6 flex items-center justify-center gap-3 text-lg font-semibold transition-all duration-200 shadow-lg hover:shadow-xl mb-6"
+              >
+                <Heart className="w-6 h-6" />
+                Log Comprehensive Health Data
+              </button>
 
               {/* Quick Action Cards - Clean and accessible */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
@@ -413,6 +462,9 @@ export default function PatientDashboard() {
       )}
       {activeModal === 'feeling' && (
         <AddFeelingModal onClose={() => setActiveModal(null)} onAdd={handleAddEntry} />
+      )}
+      {activeModal === 'health_metrics' && (
+        <AddHealthMetricsModal onClose={() => setActiveModal(null)} onAdd={handleAddEntry} />
       )}
       {activeModal === 'settings' && (
         <PatientSettings onClose={() => setActiveModal(null)} />
