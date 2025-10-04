@@ -8,6 +8,9 @@
     "server": "node server.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
     "build": "vite build",
+    "build:server": "node server.js",
+    "start": "NODE_ENV=production node server.js",
+    "start:prod": "npm run build && npm run start",
     "lint": "eslint .",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
@@ -17,6 +20,7 @@
     "bcryptjs": "^3.0.2",
     "better-sqlite3": "^12.4.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",

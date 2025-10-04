@@ -5,15 +5,23 @@ import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: CORS_ORIGIN,
+  credentials: true
+}));
 app.use(express.json());
 
 // Initialize SQLite database
@@ -961,6 +969,18 @@ app.get('/api/autofill/:userType', authMiddleware, async (req, res) => {
   }
 });
 
+// Serve static files in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'dist')));
+  
+  // Handle React routing, return all requests to React app
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+  });
+}
+
 app.listen(PORT, () => {
   console.log(`✓ Server running on http://localhost:${PORT}`);
+  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✓ CORS Origin: ${CORS_ORIGIN}`);
 });

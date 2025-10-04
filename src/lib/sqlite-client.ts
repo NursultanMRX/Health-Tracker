@@ -1,5 +1,7 @@
 // SQLite API client - provides Supabase-like interface
-const API_URL = 'http://localhost:3001/api';
+import { API_CONFIG } from './config';
+
+const API_URL = API_CONFIG.BASE_URL;
 
 let authToken: string | null = null;
 
