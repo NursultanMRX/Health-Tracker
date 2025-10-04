@@ -17,8 +17,9 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize SQLite database
-const db = new Database(path.join(__dirname, 'diabetes.db'));
+const db = new Database(path.join(__dirname, 'diabetes.db'), { readonly: false, fileMustExist: false });
 db.pragma('foreign_keys = ON');
+db.pragma('journal_mode = WAL');
 
 // Initialize schema
 function initializeDatabase() {
