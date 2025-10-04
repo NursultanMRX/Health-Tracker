@@ -1,9 +1,11 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { SettingsProvider } from './contexts/SettingsContext';
 import AuthScreen from './components/auth/AuthScreen';
 import PatientPortal from './components/patient/PatientPortal';
 import DoctorDashboard from './components/doctor/DoctorDashboard';
 import LoadingScreen from './components/common/LoadingScreen';
+import BookReadingPage from './components/patient/BookReadingPage';
 
 /**
  * AppContent - Main application routing logic
@@ -31,19 +33,26 @@ function AppContent() {
     return <AuthScreen />;
   }
 
-  // Route to role-specific portal
-  // PatientPortal handles onboarding vs dashboard logic internally
-  if (profile.role === 'patient') {
-    return <PatientPortal profile={profile} />;
-  }
+  // Route to role-specific portal with React Router
+  return (
+    <Routes>
+      {/* Patient Routes */}
+      {profile.role === 'patient' && (
+        <>
+          <Route path="/" element={<PatientPortal profile={profile} />} />
+          <Route path="/learning/:bookId" element={<BookReadingPage />} />
+        </>
+      )}
 
-  // Doctors go directly to their dashboard
-  if (profile.role === 'doctor') {
-    return <DoctorDashboard />;
-  }
+      {/* Doctor Routes */}
+      {profile.role === 'doctor' && (
+        <Route path="/" element={<DoctorDashboard />} />
+      )}
 
-  // Fallback for unknown roles (should never happen)
-  return null;
+      {/* Redirect any unknown routes to home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
 /**
@@ -55,11 +64,13 @@ function AppContent() {
  */
 function App() {
   return (
-    <AuthProvider>
-      <SettingsProvider>
-        <AppContent />
-      </SettingsProvider>
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <SettingsProvider>
+          <AppContent />
+        </SettingsProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

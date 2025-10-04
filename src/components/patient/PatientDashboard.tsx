@@ -3,7 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../contexts/SettingsContext';
 import { GlucoseReading } from '../../lib/types';
 import { calculateTIR, calculateAverage, getDaysAgo } from '../../lib/utils';
-import { Droplets, Utensils, Activity as ActivityIcon, Pill, Heart, Plus, Settings, LogOut, TrendingUp, Calendar, Bell, User, Smile, Shield } from 'lucide-react';
+import { Droplets, Utensils, Activity as ActivityIcon, Pill, Heart, Plus, Settings, LogOut, TrendingUp, Calendar, Bell, User, Smile, Shield, BookOpen } from 'lucide-react';
 import AddGlucoseModal from './modals/AddGlucoseModal';
 import AddMealModal from './modals/AddMealModal';
 import AddActivityModal from './modals/AddActivityModal';
@@ -14,6 +14,7 @@ import DailyLogList from './DailyLogList';
 import PatientCharts from './PatientCharts';
 import PatientSettings from './PatientSettings';
 import GlucoseChart from './GlucoseChart';
+import LearningSection from './LearningSection';
 
 type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'health_metrics' | 'settings' | null;
 
@@ -21,7 +22,7 @@ export default function PatientDashboard() {
   const { user, profile, signOut } = useAuth();
   const { settings } = useSettings();
   const [activeModal, setActiveModal] = useState<ModalType>(null);
-  const [activeView, setActiveView] = useState<'dashboard' | 'log' | 'charts'>('dashboard');
+  const [activeView, setActiveView] = useState<'dashboard' | 'log' | 'charts' | 'learning'>('dashboard');
   const [readings, setReadings] = useState<GlucoseReading[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedMealType, setSelectedMealType] = useState<string>('breakfast');
@@ -45,7 +46,7 @@ export default function PatientDashboard() {
 
       if (response.ok) {
         const metrics = await response.json();
-        if (metrics.length > 0 &&& metrics[0].risk_percentage) {
+        if (metrics.length > 0 && metrics[0].risk_percentage) {
           setLatestRisk(metrics[0]);
         }
       }
@@ -281,6 +282,16 @@ export default function PatientDashboard() {
             >
               History
             </button>
+            <button
+              onClick={() => setActiveView('learning')}
+              className={`flex-1 py-2.5 px-4 rounded-lg font-medium text-sm transition-all ${
+                activeView === 'learning'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              Learning
+            </button>
           </div>
         </div>
       </header>
@@ -444,6 +455,8 @@ export default function PatientDashboard() {
         {activeView === 'log' && <DailyLogList onUpdate={loadReadings} />}
 
         {activeView === 'charts' && !profile?.assigned_doctor_id && <GlucoseChart />}
+
+        {activeView === 'learning' && <LearningSection />}
       </main>
 
       {activeModal === 'glucose' && (
