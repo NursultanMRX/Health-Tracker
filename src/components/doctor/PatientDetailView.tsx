@@ -15,6 +15,13 @@ type Patient = {
   email: string;
 };
 
+type HealthMetric = {
+  risk_percentage: string;
+  risk_level: string;
+  recommendation: string;
+  timestamp: string;
+};
+
 type Props = {
   patient: Patient;
   onBack: () => void;
@@ -26,9 +33,11 @@ export default function PatientDetailView({ patient, onBack }: Props) {
   const [readings, setReadings] = useState<GlucoseReading[]>([]);
   const [days, setDays] = useState(30);
   const [loading, setLoading] = useState(true);
+  const [latestRisk, setLatestRisk] = useState<HealthMetric | null>(null);
 
   useEffect(() => {
     loadReadings();
+    loadLatestRisk();
   }, [days, patient.id]);
 
   const loadReadings = async () => {
@@ -50,6 +59,25 @@ export default function PatientDetailView({ patient, onBack }: Props) {
       console.error('Error loading readings:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadLatestRisk = async () => {
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(
+        `${API_URL}/health-metrics?patient_id=${patient.id}`,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+
+      if (response.ok) {
+        const metrics = await response.json();
+        if (metrics.length > 0 && metrics[0].risk_percentage) {
+          setLatestRisk(metrics[0]);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading risk data:', error);
     }
   };
 
@@ -160,6 +188,27 @@ export default function PatientDetailView({ patient, onBack }: Props) {
               ))}
             </div>
           </div>
+
+          {/* Diabetes Risk Assessment */}
+          {latestRisk && (
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl shadow-sm p-6 border border-purple-200">
+              <h3 className="text-sm font-medium text-purple-900 mb-4">Diabetes Risk Assessment</h3>
+              <div className="grid grid-cols-3 gap-6">
+                <div>
+                  <p className="text-sm text-purple-700 mb-1">Risk Percentage</p>
+                  <p className="text-4xl font-bold text-purple-900">{latestRisk.risk_percentage}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-purple-700 mb-1">Risk Level</p>
+                  <p className="text-2xl font-bold text-purple-900">{latestRisk.risk_level}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-purple-700 mb-1">Recommendation</p>
+                  <p className="text-sm text-purple-900 italic">{latestRisk.recommendation}</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Clinical Summary */}
           <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">

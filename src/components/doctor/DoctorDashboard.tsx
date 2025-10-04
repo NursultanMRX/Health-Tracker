@@ -15,6 +15,7 @@ type PatientWithAlerts = Profile & {
   timeInRange?: number;
   glucoseReadings?: GlucoseReading[];
   diabetesRisk?: string;
+  diabetesRiskValue?: number;
 };
 
 type SortOption = 'critical_first' | 'stable_first' | 'recent_first' | 'oldest_first';
@@ -121,15 +122,24 @@ export default function DoctorDashboard() {
               ? Math.round((inRangeCount / recentReadings.length) * 100)
               : 0;
 
+            // Determine if patient is critical based on glucose OR diabetes risk
+            const diabetesRiskValue = latestHealthMetric?.risk_percentage
+              ? parseFloat(latestHealthMetric.risk_percentage.replace('%', ''))
+              : 0;
+            const isCriticalGlucose = (latestReading?.value_mg_dl || 0) > 180 || (latestReading?.value_mg_dl || 0) < 70;
+            const isCriticalDiabetesRisk = diabetesRiskValue >= 50; // High diabetes risk threshold
+            const hasCriticalCondition = patientsWithAlertIds.has(patient.id) || isCriticalGlucose || isCriticalDiabetesRisk;
+
             return {
               ...patient,
-              hasActiveAlerts: patientsWithAlertIds.has(patient.id),
+              hasActiveAlerts: hasCriticalCondition,
               hasData: glucoseData && glucoseData.length > 0,
               latestGlucose: latestReading?.value_mg_dl,
               glucoseTrend,
               timeInRange,
               glucoseReadings: recentReadings.slice(0, 100), // Last 100 readings for chart
               diabetesRisk: latestHealthMetric?.risk_percentage,
+              diabetesRiskValue, // Store numeric value for sorting
             };
           } catch {
             return {
@@ -159,9 +169,15 @@ export default function DoctorDashboard() {
   const sortedPatients = [...filteredPatients].sort((a, b) => {
     switch (sortBy) {
       case 'critical_first':
-        // Critical (with alerts) first, then stable
+        // Critical (with alerts OR high diabetes risk) first, then stable
         if (a.hasActiveAlerts && !b.hasActiveAlerts) return -1;
         if (!a.hasActiveAlerts && b.hasActiveAlerts) return 1;
+        // If both critical, prioritize by diabetes risk value (higher risk first)
+        if (a.hasActiveAlerts && b.hasActiveAlerts) {
+          const aRisk = a.diabetesRiskValue || 0;
+          const bRisk = b.diabetesRiskValue || 0;
+          if (aRisk !== bRisk) return bRisk - aRisk;
+        }
         // If same status, sort by creation date (newest first)
         return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
 
@@ -227,7 +243,7 @@ export default function DoctorDashboard() {
                 </div>
                 <AlertCircle className="w-10 h-10 text-red-500 opacity-80" />
               </div>
-              <p className="text-xs text-red-700 mt-2">Active alerts - Immediate attention required</p>
+              <p className="text-xs text-red-700 mt-2">High glucose or diabetes risk - Immediate attention required</p>
             </div>
 
             <div className="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-4">

@@ -197,6 +197,14 @@ export default function PatientCard({ patient, onClick, viewMode = 'grid' }: Pat
         {age ? `${age} years` : 'Age unknown'} {patient.sex ? `• ${patient.sex}` : ''}
       </p>
 
+      {/* Diabetes Risk */}
+      {patient.diabetesRisk && (
+        <div className="mb-4 p-3 bg-purple-50 rounded-lg border border-purple-200">
+          <p className="text-xs font-medium text-purple-700 mb-1">Diabetes Risk</p>
+          <p className="text-2xl font-bold text-purple-900">{patient.diabetesRisk}</p>
+        </div>
+      )}
+
       {/* Main Content: Glucose Level and Trend */}
       {patient.hasData && patient.latestGlucose ? (
         <>

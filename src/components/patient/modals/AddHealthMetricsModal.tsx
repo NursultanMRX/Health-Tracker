@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
-import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, User, Brain, Scale, Stethoscope } from 'lucide-react';
+import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, Brain } from 'lucide-react';
 
 type AddHealthMetricsModalProps = {
   onClose: () => void;
@@ -16,7 +16,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
     diet_type: 'Balanced' as 'Vegetarian' | 'Vegan' | 'Balanced' | 'Junk Food' | 'Keto',
     sleep_hours: '',
     stress_level: 'Moderate' as 'Low' | 'Moderate' | 'High',
-    mental_health_condition: 'None',
+    mental_health_condition: 'Anxiety' as 'Anxiety' | 'PTSD' | 'Depression' | 'Bipolar',
     work_hours_per_week: '',
     screen_time_per_day_hours: '',
     social_interaction_score: '',
@@ -63,7 +63,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
       };
 
       try {
-        const mlResponse = await fetch('https://263cd73778c1.ngrok-free.app/predict', {
+        const mlResponse = await fetch('https://a44f2bd3696a.ngrok-free.app/predict', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -104,11 +104,6 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
 
       if (!response.ok) throw new Error('Failed to save health metrics');
 
-      // Show success message with risk assessment if available
-      if (predictionResult.risk_percentage) {
-        alert(`Health data saved successfully!\n\nDiabetes Risk: ${predictionResult.risk_percentage}\nRisk Level: ${predictionResult.risk_level}\n\n${predictionResult.recommendation}`);
-      }
-
       onAdd();
     } catch (error) {
       console.error('Error saving health metrics:', error);
@@ -132,42 +127,6 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
-          {/* Age */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-              <User className="w-4 h-4" />
-              Age
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="120"
-              value={formData.age}
-              onChange={(e) => setFormData({ ...formData, age: e.target.value })}
-              placeholder="e.g., 30"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          {/* Gender */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-              <User className="w-4 h-4" />
-              Gender
-            </label>
-            <select
-              value={formData.gender}
-              onChange={(e) => setFormData({ ...formData, gender: e.target.value as any })}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
           {/* Exercise Level */}
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
@@ -249,14 +208,17 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
               <Brain className="w-4 h-4" />
               Mental Health Condition
             </label>
-            <input
-              type="text"
+            <select
               value={formData.mental_health_condition}
-              onChange={(e) => setFormData({ ...formData, mental_health_condition: e.target.value })}
-              placeholder="e.g., None, Anxiety, Depression"
+              onChange={(e) => setFormData({ ...formData, mental_health_condition: e.target.value as any })}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
-            />
+            >
+              <option value="Anxiety">Anxiety</option>
+              <option value="PTSD">PTSD</option>
+              <option value="Depression">Depression</option>
+              <option value="Bipolar">Bipolar</option>
+            </select>
           </div>
 
           {/* Work Hours Per Week */}
@@ -333,53 +295,6 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
-          </div>
-
-          {/* BMI */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-              <Scale className="w-4 h-4" />
-              BMI (Body Mass Index)
-            </label>
-            <input
-              type="number"
-              step="0.1"
-              min="10"
-              max="60"
-              value={formData.bmi}
-              onChange={(e) => setFormData({ ...formData, bmi: e.target.value })}
-              placeholder="e.g., 22.5"
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </div>
-
-          {/* Health Conditions */}
-          <div className="space-y-3">
-            <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-              <Stethoscope className="w-4 h-4" />
-              Health Conditions
-            </label>
-            <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.hypertension}
-                  onChange={(e) => setFormData({ ...formData, hypertension: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-700">Hypertension</span>
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.heart_disease}
-                  onChange={(e) => setFormData({ ...formData, heart_disease: e.target.checked })}
-                  className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-                />
-                <span className="text-sm text-gray-700">Heart Disease</span>
-              </label>
-            </div>
           </div>
 
           {/* HbA1c Level */}
