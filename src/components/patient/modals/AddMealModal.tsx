@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Save } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -9,6 +10,7 @@ type Props = {
 
 export default function AddMealModal({ onClose, onAdd }: Props) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [mealName, setMealName] = useState('');
   const [carbs, setCarbs] = useState('');
   const [portion, setPortion] = useState<'small' | 'medium' | 'large'>('medium');
@@ -57,7 +59,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Log Meal</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('modals.logMeal.title')}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -66,7 +68,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
             <label htmlFor="meal-name" className="block text-sm font-medium text-gray-700 mb-2">
-              What did you eat?
+              {t('modals.logMeal.whatDidYouEatLabel')}
             </label>
             <input
               id="meal-name"
@@ -74,14 +76,14 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
               value={mealName}
               onChange={(e) => setMealName(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., Chicken salad"
+              placeholder={t('modals.logMeal.whatDidYouEatPlaceholder')}
               required
               autoFocus
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Portion Size</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('modals.logMeal.portionSizeLabel')}</label>
             <div className="grid grid-cols-3 gap-2">
               {(['small', 'medium', 'large'] as const).map((size) => (
                 <label key={size}>
@@ -94,7 +96,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
                     className="sr-only peer"
                   />
                   <div className="p-3 border-2 border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-gray-400 transition-colors capitalize">
-                    {size}
+                    {t(`modals.logMeal.${size}`)}
                   </div>
                 </label>
               ))}
@@ -103,7 +105,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="carbs" className="block text-sm font-medium text-gray-700 mb-2">
-              Carbohydrates (optional)
+              {t('modals.logMeal.carbohydratesLabel')}
             </label>
             <div className="relative">
               <input
@@ -116,14 +118,14 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
                 min="0"
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">
-                grams
+                {t('modals.logMeal.grams')}
               </span>
             </div>
           </div>
 
           <div>
             <label htmlFor="meal-timestamp" className="block text-sm font-medium text-gray-700 mb-2">
-              Time
+              {t('common.timeLabel')}
             </label>
             <input
               id="meal-timestamp"
@@ -136,7 +138,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="meal-note" className="block text-sm font-medium text-gray-700 mb-2">
-              Note (optional)
+              {t('common.optionalNoteLabel')}
             </label>
             <textarea
               id="meal-note"
@@ -144,7 +146,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
               onChange={(e) => setNote(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               rows={3}
-              placeholder="Add any notes..."
+              placeholder={t('common.addNotePlaceholder')}
             />
           </div>
 
@@ -160,7 +162,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
             className="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-medium text-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
-            {saving ? 'Saving...' : 'Save Meal'}
+            {saving ? 'Saving...' : t('buttons.saveMeal')}
           </button>
         </form>
       </div>

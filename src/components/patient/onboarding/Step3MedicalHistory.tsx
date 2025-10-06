@@ -50,7 +50,7 @@ function ToggleSwitch({
         <p className={`text-xs font-semibold mt-1 text-center transition-colors ${
           enabled ? 'text-[#3A86FF]' : 'text-gray-500'
         }`}>
-          {enabled ? 'Ha / Yes' : 'Yo\'q / No'}
+          {enabled ? 'Yes' : 'No'}
         </p>
       </div>
     </button>
@@ -65,13 +65,7 @@ export default function Step3MedicalHistory({ formData, updateFormData }: Step3P
     <div className="space-y-6">
       {/* Section Header */}
       <div className="mb-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-2">
-          Tibbiy tarix
-        </h3>
         <p className="text-sm text-gray-600">
-          Sizda quyidagi kasalliklardan birontasi tashxislangan bo'lsa, belgilang.
-        </p>
-        <p className="text-xs text-gray-500 italic mt-1">
           Indicate if you have been diagnosed with any of the following conditions.
         </p>
       </div>
@@ -81,14 +75,14 @@ export default function Step3MedicalHistory({ formData, updateFormData }: Step3P
         <div className="flex items-center gap-2 mb-3">
           <Activity className="w-5 h-5 text-[#3A86FF]" />
           <p className="text-sm font-semibold text-gray-700">
-            Yuqori qon bosimi (Gipertoniya)
+            High Blood Pressure (Hypertension)
           </p>
         </div>
         <ToggleSwitch
           enabled={formData.hypertension}
           onChange={(value) => updateFormData({ hypertension: value })}
-          label="Gipertoniya tashxisingiz bormi?"
-          sublabel="Do you have a hypertension diagnosis?"
+          label="Do you have a hypertension diagnosis?"
+          sublabel=""
         />
       </div>
 
@@ -97,14 +91,14 @@ export default function Step3MedicalHistory({ formData, updateFormData }: Step3P
         <div className="flex items-center gap-2 mb-3">
           <Heart className="w-5 h-5 text-[#3A86FF]" />
           <p className="text-sm font-semibold text-gray-700">
-            Yurak kasalliklari
+            Heart Disease
           </p>
         </div>
         <ToggleSwitch
           enabled={formData.heart_disease}
           onChange={(value) => updateFormData({ heart_disease: value })}
-          label="Yurak kasalliklari tashxisingiz bormi?"
-          sublabel="Do you have a heart disease diagnosis?"
+          label="Do you have a heart disease diagnosis?"
+          sublabel=""
         />
       </div>
 
@@ -118,12 +112,9 @@ export default function Step3MedicalHistory({ formData, updateFormData }: Step3P
           </div>
           <div>
             <p className="text-xs font-medium text-gray-800 mb-1">
-              Tibbiy ma'lumotlar maxfiyligi
-            </p>
+Confidentiality of Medical Information            </p>
             <p className="text-xs text-gray-600">
-              Sizning tibbiy ma'lumotlaringiz to'liq maxfiy saqlanadi va faqat
-              sog'ligingizni baholash uchun ishlatiladi. Hech qanday uchinchi tomon
-              bu ma'lumotlarga kirish huquqiga ega emas.
+              Your medical information will be kept entirely confidential and will only be used to assess your health. No third party has the right to access this information.
             </p>
             <p className="text-xs text-gray-500 mt-1 italic">
               Your medical information is kept completely confidential and used only
@@ -136,8 +127,7 @@ export default function Step3MedicalHistory({ formData, updateFormData }: Step3P
       {/* Optional Note */}
       <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
         <p className="text-xs text-gray-700">
-          <span className="font-semibold">Eslatma:</span> Agar hozirgi paytda sizda bu kasalliklardan
-          hech biri bo'lmasa, "Yo'q" ni tanlang va keyingisiga o'ting.
+          <span className="font-semibold">Remember:</span>If you don't currently have any of these conditions, select "No" and move on to the next one.
         </p>
         <p className="text-xs text-gray-500 italic mt-1">
           Note: If you currently don't have any of these conditions, select "No" and continue.

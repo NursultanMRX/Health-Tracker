@@ -43,7 +43,7 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
       <div>
         <label htmlFor="height" className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <Ruler className="w-4 h-4 text-[#3A86FF]" />
-          Bo'yingiz (sm)
+          Height (cm)
           <span className="text-red-500">*</span>
         </label>
         <p className="text-xs text-gray-500 mb-3">Your height in centimeters</p>
@@ -53,7 +53,7 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
             id="height"
             value={formData.height_cm}
             onChange={(e) => updateFormData({ height_cm: e.target.value })}
-            placeholder="Masalan: 170"
+            placeholder="Example: 170"
             min="50"
             max="250"
             step="0.1"
@@ -61,11 +61,11 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
             required
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500">
-            sm
+            cm
           </span>
         </div>
         <p className="text-xs text-gray-400 mt-1">
-          100 sm va 250 sm orasida / Between 50 cm and 250 cm
+          Between 50 cm and 250 cm
         </p>
       </div>
 
@@ -73,7 +73,7 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
       <div>
         <label htmlFor="weight" className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
           <Weight className="w-4 h-4 text-[#3A86FF]" />
-          Vazningiz (kg)
+          Weight (kg)
           <span className="text-red-500">*</span>
         </label>
         <p className="text-xs text-gray-500 mb-3">Your weight in kilograms</p>
@@ -83,7 +83,7 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
             id="weight"
             value={formData.weight_kg}
             onChange={(e) => updateFormData({ weight_kg: e.target.value })}
-            placeholder="Masalan: 70"
+            placeholder="Example: 70"
             min="20"
             max="300"
             step="0.1"
@@ -95,7 +95,7 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
           </span>
         </div>
         <p className="text-xs text-gray-400 mt-1">
-          20 kg va 300 kg orasida / Between 20 kg and 300 kg
+          Between 20 kg and 300 kg
         </p>
       </div>
 
@@ -154,13 +154,9 @@ export default function Step2PhysicalMeasurements({ formData, updateFormData }: 
           </div>
           <div>
             <p className="text-xs font-medium text-gray-800 mb-1">
-              Nima uchun bo'y va vazn kerak?
+              Why are height and weight needed?
             </p>
             <p className="text-xs text-gray-600">
-              Bo'y va vazn orqali BMI (Tana massasi indeksi) hisoblanadi.
-              Bu ko'rsatkich diabetni bashorat qilishda muhim rol o'ynaydi.
-            </p>
-            <p className="text-xs text-gray-500 mt-1 italic">
               Height and weight are used to calculate BMI (Body Mass Index).
               This metric plays an important role in diabetes prediction.
             </p>

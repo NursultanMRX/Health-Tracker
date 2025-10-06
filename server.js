@@ -6,6 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+import cron from 'node-cron';
+import * as notificationService from './notificationService.js';
+import * as exportService from './exportService.js';
 
 // Load environment variables
 dotenv.config();
@@ -19,7 +22,7 @@ const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
 // Middleware
 app.use(cors({
-  origin: CORS_ORIGIN,
+  origin: [CORS_ORIGIN, 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:5177', 'http://localhost:5178', 'http://localhost:5179'],
   credentials: true
 }));
 app.use(express.json());
@@ -183,9 +186,32 @@ function initializeDatabase() {
       created_at TEXT DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS user_notification_settings (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL UNIQUE REFERENCES profiles(id) ON DELETE CASCADE,
+      fcm_token TEXT,
+      preferred_language TEXT DEFAULT 'en' CHECK (preferred_language IN ('en', 'ru', 'kaa', 'uz')),
+      reminder_time TEXT DEFAULT '09:00',
+      timezone TEXT DEFAULT 'UTC',
+      enabled_notifications TEXT DEFAULT '{"critical":true,"warnings":true,"reminders":true,"positive":true}',
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS notifications_log (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+      notification_type TEXT NOT NULL,
+      triggered_at TEXT DEFAULT (datetime('now')),
+      sent_status TEXT DEFAULT 'pending' CHECK (sent_status IN ('pending', 'sent', 'failed')),
+      metadata TEXT DEFAULT '{}',
+      created_at TEXT DEFAULT (datetime('now'))
+    );
+
     CREATE INDEX IF NOT EXISTS idx_glucose_readings_patient_timestamp ON glucose_readings(patient_id, timestamp DESC);
     CREATE INDEX IF NOT EXISTS idx_health_metrics_patient_timestamp ON health_metrics(patient_id, timestamp DESC);
     CREATE INDEX IF NOT EXISTS idx_sessions_token ON sessions(token);
+    CREATE INDEX IF NOT EXISTS idx_notifications_log_user_type_time ON notifications_log(user_id, notification_type, triggered_at DESC);
   `);
 
   console.log('✓ Database initialized');
@@ -943,8 +969,8 @@ app.get('/api/autofill/:userType', authMiddleware, async (req, res) => {
     console.log('Autofill request - User ID:', req.user.id, 'UserType:', userType);
 
     // Only allow for specific user
-    if (req.user.id !== '31b36bb6-9601-4ef9-b669-900176e942fc') {
-      console.log('Autofill denied - User ID mismatch:', req.user.id, 'Expected:', '31b36bb6-9601-4ef9-b669-900176e942fc');
+    if (req.user.id !== '30af11c8-568e-4bce-837c-c5dfb4f0833b') {
+      console.log('Autofill denied - User ID mismatch:', req.user.id, 'Expected:', '30af11c8-568e-4bce-837c-c5dfb4f0833b');
       return res.status(403).json({ error: 'Autofill not available for this user' });
     }
 
@@ -969,10 +995,318 @@ app.get('/api/autofill/:userType', authMiddleware, async (req, res) => {
   }
 });
 
+// Notification API endpoints
+app.post('/api/notifications/register-token', authMiddleware, (req, res) => {
+  const { fcmToken } = req.body;
+
+  try {
+    // Check if settings exist for user
+    const existing = db.prepare(`
+      SELECT id FROM user_notification_settings WHERE user_id = ?
+    `).get(req.user.id);
+
+    if (existing) {
+      // Update existing settings
+      db.prepare(`
+        UPDATE user_notification_settings
+        SET fcm_token = ?, updated_at = datetime('now')
+        WHERE user_id = ?
+      `).run(fcmToken, req.user.id);
+    } else {
+      // Create new settings
+      const id = uuidv4();
+      db.prepare(`
+        INSERT INTO user_notification_settings (id, user_id, fcm_token)
+        VALUES (?, ?, ?)
+      `).run(id, req.user.id, fcmToken);
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/notifications/settings', authMiddleware, (req, res) => {
+  const { preferredLanguage, reminderTime, timezone, enabledNotifications } = req.body;
+
+  try {
+    // Check if settings exist
+    const existing = db.prepare(`
+      SELECT id FROM user_notification_settings WHERE user_id = ?
+    `).get(req.user.id);
+
+    if (existing) {
+      // Build update query dynamically
+      const fields = [];
+      const values = [];
+
+      if (preferredLanguage !== undefined) {
+        fields.push('preferred_language = ?');
+        values.push(preferredLanguage);
+      }
+      if (reminderTime !== undefined) {
+        fields.push('reminder_time = ?');
+        values.push(reminderTime);
+      }
+      if (timezone !== undefined) {
+        fields.push('timezone = ?');
+        values.push(timezone);
+      }
+      if (enabledNotifications !== undefined) {
+        fields.push('enabled_notifications = ?');
+        values.push(JSON.stringify(enabledNotifications));
+      }
+
+      if (fields.length > 0) {
+        values.push(req.user.id);
+        db.prepare(`
+          UPDATE user_notification_settings
+          SET ${fields.join(', ')}, updated_at = datetime('now')
+          WHERE user_id = ?
+        `).run(...values);
+      }
+    } else {
+      // Create new settings
+      const id = uuidv4();
+      db.prepare(`
+        INSERT INTO user_notification_settings (
+          id, user_id, preferred_language, reminder_time, timezone, enabled_notifications
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `).run(
+        id,
+        req.user.id,
+        preferredLanguage || 'en',
+        reminderTime || '09:00',
+        timezone || 'UTC',
+        JSON.stringify(enabledNotifications || { critical: true, warnings: true, reminders: true, positive: true })
+      );
+    }
+
+    const settings = db.prepare(`
+      SELECT * FROM user_notification_settings WHERE user_id = ?
+    `).get(req.user.id);
+
+    res.json({
+      ...settings,
+      enabled_notifications: JSON.parse(settings.enabled_notifications)
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/notifications/settings', authMiddleware, (req, res) => {
+  try {
+    const settings = db.prepare(`
+      SELECT * FROM user_notification_settings WHERE user_id = ?
+    `).get(req.user.id);
+
+    if (!settings) {
+      return res.json({
+        preferred_language: 'en',
+        reminder_time: '09:00',
+        timezone: 'UTC',
+        enabled_notifications: { critical: true, warnings: true, reminders: true, positive: true }
+      });
+    }
+
+    res.json({
+      ...settings,
+      enabled_notifications: JSON.parse(settings.enabled_notifications)
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/notifications/history', authMiddleware, (req, res) => {
+  const { limit = 50 } = req.query;
+
+  try {
+    const history = db.prepare(`
+      SELECT * FROM notifications_log
+      WHERE user_id = ?
+      ORDER BY triggered_at DESC
+      LIMIT ?
+    `).all(req.user.id, parseInt(limit));
+
+    res.json(history.map(h => ({
+      ...h,
+      metadata: JSON.parse(h.metadata || '{}')
+    })));
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Test notification endpoint (for development)
+app.post('/api/notifications/test', authMiddleware, async (req, res) => {
+  const { notificationType, data } = req.body;
+
+  try {
+    const result = await notificationService.sendPushNotification(
+      db,
+      req.user.id,
+      notificationType,
+      data || {}
+    );
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Export patient report endpoint
+app.post('/api/patients/:patientId/export', authMiddleware, async (req, res) => {
+  const { format } = req.body; // 'pdf' or 'csv'
+  const { patientId } = req.params;
+
+  try {
+    // Verify doctor has access to this patient
+    if (req.user.role === 'doctor') {
+      const patient = db.prepare(`
+        SELECT p.*, od.date_of_birth, od.gender
+        FROM profiles p
+        LEFT JOIN onboarding_data od ON p.id = od.patient_id
+        WHERE p.id = ? AND p.assigned_doctor_id = ?
+      `).get(patientId, req.user.id);
+
+      if (!patient) {
+        return res.status(403).json({ error: 'Access denied to this patient' });
+      }
+    } else if (req.user.role === 'patient') {
+      // Patients can only export their own data
+      if (req.user.id !== patientId) {
+        return res.status(403).json({ error: 'Access denied' });
+      }
+    }
+
+    // Fetch patient data
+    const patientData = db.prepare(`
+      SELECT p.*, od.date_of_birth, od.gender as sex
+      FROM profiles p
+      LEFT JOIN onboarding_data od ON p.id = od.patient_id
+      WHERE p.id = ?
+    `).get(patientId);
+
+    if (!patientData) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    // Fetch glucose readings (last 90 days)
+    const ninetyDaysAgo = new Date();
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+
+    const readings = db.prepare(`
+      SELECT * FROM glucose_readings
+      WHERE patient_id = ? AND timestamp >= ?
+      ORDER BY timestamp DESC
+    `).all(patientId, ninetyDaysAgo.toISOString());
+
+    // Fetch health metrics (latest)
+    const healthMetrics = db.prepare(`
+      SELECT * FROM health_metrics
+      WHERE patient_id = ?
+      ORDER BY timestamp DESC
+      LIMIT 5
+    `).all(patientId);
+
+    // Generate report based on format
+    let buffer, filename, contentType;
+
+    if (format === 'pdf') {
+      buffer = await exportService.generatePDFReport(patientData, readings, healthMetrics);
+      filename = `medical-report-${patientData.full_name.replace(/\s/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+      contentType = 'application/pdf';
+    } else if (format === 'csv') {
+      buffer = await exportService.generateCSVReport(patientData, readings);
+      filename = `glucose-data-${patientData.full_name.replace(/\s/g, '-')}-${new Date().toISOString().split('T')[0]}.csv`;
+      contentType = 'text/csv';
+    } else {
+      return res.status(400).json({ error: 'Invalid format. Use "pdf" or "csv"' });
+    }
+
+    // Set headers and send file
+    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(buffer);
+  } catch (error) {
+    console.error('Export error:', error);
+    res.status(500).json({ error: 'Failed to generate report', details: error.message });
+  }
+});
+
+// Initialize Firebase and set up cron jobs
+notificationService.initializeFirebase();
+
+// Cron job: Check high risk users every hour
+cron.schedule('0 * * * *', async () => {
+  console.log('[CRON] Running hourly high risk check...');
+  try {
+    await notificationService.checkHighRiskUsers(db);
+  } catch (error) {
+    console.error('[CRON] Error in high risk check:', error);
+  }
+});
+
+// Cron job: Check critical glucose every 30 minutes
+cron.schedule('*/30 * * * *', async () => {
+  console.log('[CRON] Running critical glucose check...');
+  try {
+    await notificationService.checkCriticalGlucose(db);
+  } catch (error) {
+    console.error('[CRON] Error in critical glucose check:', error);
+  }
+});
+
+// Cron job: Check consistent high glucose daily at 8 PM
+cron.schedule('0 20 * * *', async () => {
+  console.log('[CRON] Running consistent high glucose check...');
+  try {
+    await notificationService.checkConsistentHighGlucose(db);
+  } catch (error) {
+    console.error('[CRON] Error in consistent high check:', error);
+  }
+});
+
+// Cron job: Send log reminders daily at 9 AM
+cron.schedule('0 9 * * *', async () => {
+  console.log('[CRON] Running log reminder check...');
+  try {
+    await notificationService.checkLogReminders(db);
+  } catch (error) {
+    console.error('[CRON] Error in log reminder check:', error);
+  }
+});
+
+// Cron job: Send positive reinforcement every Sunday at 6 PM
+cron.schedule('0 18 * * 0', async () => {
+  console.log('[CRON] Running positive reinforcement check...');
+  try {
+    await notificationService.checkPositiveReinforcement(db);
+  } catch (error) {
+    console.error('[CRON] Error in positive reinforcement check:', error);
+  }
+});
+
+// Cron job: Check dinner spike patterns every Monday at 10 AM
+cron.schedule('0 10 * * 1', async () => {
+  console.log('[CRON] Running dinner spike pattern check...');
+  try {
+    await notificationService.checkDinnerSpikePattern(db);
+  } catch (error) {
+    console.error('[CRON] Error in dinner spike pattern check:', error);
+  }
+});
+
+console.log('✓ Notification cron jobs scheduled');
+
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'dist')));
-  
+
   // Handle React routing, return all requests to React app
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));

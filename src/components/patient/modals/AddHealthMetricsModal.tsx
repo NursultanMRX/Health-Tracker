@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, Brain } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type AddHealthMetricsModalProps = {
   onClose: () => void;
   onAdd: () => void;
+  voiceData?: any;
 };
 
-export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetricsModalProps) {
+export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: AddHealthMetricsModalProps) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     age: '',
     gender: 'Female' as 'Male' | 'Female' | 'Other',
@@ -29,11 +32,39 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
   });
   const [loading, setLoading] = useState(false);
 
+  // Apply voice data when available
+  useEffect(() => {
+    if (voiceData) {
+      console.log('Applying voice data to form:', voiceData);
+      setFormData(prev => ({
+        ...prev,
+        ...(voiceData.work_hours_per_week !== null && voiceData.work_hours_per_week !== undefined && {
+          work_hours_per_week: voiceData.work_hours_per_week.toString()
+        }),
+        ...(voiceData.social_interaction_score !== null && voiceData.social_interaction_score !== undefined && {
+          social_interaction_score: voiceData.social_interaction_score.toString()
+        }),
+        ...(voiceData.happiness_score !== null && voiceData.happiness_score !== undefined && {
+          happiness_score: voiceData.happiness_score.toString()
+        }),
+        ...(voiceData.blood_glucose_level !== null && voiceData.blood_glucose_level !== undefined && {
+          blood_glucose_level: voiceData.blood_glucose_level.toString()
+        }),
+        ...(voiceData.screen_time_per_day_hours !== null && voiceData.screen_time_per_day_hours !== undefined && {
+          screen_time_per_day_hours: voiceData.screen_time_per_day_hours.toString()
+        }),
+        ...(voiceData.hba1c_level !== null && voiceData.hba1c_level !== undefined && {
+          hba1c_level: voiceData.hba1c_level.toString()
+        }),
+      }));
+    }
+  }, [voiceData]);
+
   // Auto-fetch tracked data from Railway API on mount
   useEffect(() => {
     const fetchTrackedData = async () => {
       // Only autofill for user with ID: 81f74fc9-6571-4e78-8d89-1695bf90b15d
-      if (user?.id !== '31b36bb6-9601-4ef9-b669-900176e942fc') {
+      if (user?.id !== '30af11c8-568e-4bce-837c-c5dfb4f0833b') {
         return;
       }
 
@@ -243,7 +274,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Log Your Health Data</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('logYourHealthDataTitle')}</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -257,7 +288,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Activity className="w-4 h-4" />
-              Exercise Level
+              {t('exerciseLevel')}
             </label>
             <select
               value={formData.exercise_level}
@@ -275,7 +306,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Utensils className="w-4 h-4" />
-              Diet Type
+              {t('dietType')}
             </label>
             <select
               value={formData.diet_type}
@@ -295,7 +326,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Moon className="w-4 h-4" />
-              Sleep Hours (per day)
+              {t('sleepHours')}
             </label>
             <input
               type="number"
@@ -314,7 +345,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Heart className="w-4 h-4" />
-              Stress Level
+              {t('stressLevel')}
             </label>
             <select
               value={formData.stress_level}
@@ -332,7 +363,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Brain className="w-4 h-4" />
-              Mental Health Condition
+              {t('mentalHealthCondition')}
             </label>
             <select
               value={formData.mental_health_condition}
@@ -351,7 +382,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Briefcase className="w-4 h-4" />
-              Work Hours Per Week
+              {t('workHoursPerWeek')}
             </label>
             <input
               type="number"
@@ -360,7 +391,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
               max="168"
               value={formData.work_hours_per_week}
               onChange={(e) => setFormData({ ...formData, work_hours_per_week: e.target.value })}
-              placeholder="e.g., 40"
+              placeholder={t('placeholder_e_g_40')}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
@@ -370,7 +401,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Smartphone className="w-4 h-4" />
-              Screen Time Per Day (hours)
+              {t('screenTimePerDay')}
             </label>
             <input
               type="number"
@@ -389,7 +420,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Users className="w-4 h-4" />
-              Social Interaction Score (1-10)
+              {t('socialInteractionScore')}
             </label>
             <input
               type="number"
@@ -398,7 +429,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
               max="10"
               value={formData.social_interaction_score}
               onChange={(e) => setFormData({ ...formData, social_interaction_score: e.target.value })}
-              placeholder="e.g., 8.5"
+              placeholder={t('placeholder_e_g_8_5')}
               className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
@@ -408,7 +439,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Smile className="w-4 h-4" />
-              Happiness Score (1-10)
+              {t('happinessScore')}
             </label>
             <input
               type="number"
@@ -427,7 +458,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Droplets className="w-4 h-4" />
-              HbA1c Level (%)
+              {t('hba1cLevel')}
             </label>
             <input
               type="number"
@@ -446,7 +477,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
           <div>
             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
               <Droplets className="w-4 h-4" />
-              Blood Glucose Level (mg/dL)
+              {t('bloodGlucoseLevel')}
             </label>
             <input
               type="number"
@@ -466,14 +497,14 @@ export default function AddHealthMetricsModal({ onClose, onAdd }: AddHealthMetri
               onClick={onClose}
               className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
             >
-              Cancel
+              {t('cancelButton')}
             </button>
             <button
               type="submit"
               disabled={loading}
               className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Saving...' : 'Save Health Data'}
+              {loading ? 'Saving...' : t('saveButton')}
             </button>
           </div>
         </form>

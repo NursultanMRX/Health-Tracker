@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-
+import { useTranslation } from 'react-i18next';
 
 import type { Profile,  GlucoseReading } from '../../lib/types';
-import { Search, LogOut,  Users, Activity, AlertCircle, LayoutGrid, List, Filter } from 'lucide-react';
+import { Search, Users, Activity, AlertCircle, LayoutGrid, List, Filter } from 'lucide-react';
 import PatientDetailView from './PatientDetailView';
 import PatientCard from './PatientCard';
+import ProfileDropdown from '../common/ProfileDropdown';
 
 type PatientWithAlerts = Profile & {
   hasActiveAlerts?: boolean;
@@ -22,6 +23,7 @@ type SortOption = 'critical_first' | 'stable_first' | 'recent_first' | 'oldest_f
 
 export default function DoctorDashboard() {
   const { profile, signOut } = useAuth();
+  const { t } = useTranslation();
   const [patients, setPatients] = useState<PatientWithAlerts[]>([]);
   const [selectedPatient, setSelectedPatient] = useState<Profile | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -218,114 +220,113 @@ export default function DoctorDashboard() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Command Center Header with Summary Statistics */}
       <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-1">Command Center</h1>
-              <p className="text-sm text-gray-600">Welcome back, Dr. {profile?.full_name}</p>
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1">{t('commandCenter.header.title')}</h1>
+              <p className="text-xs sm:text-sm text-gray-600">{t('commandCenter.header.welcomeBack', { name: profile?.full_name })}</p>
             </div>
-            <button
-              onClick={signOut}
-              className="p-2.5 text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-              aria-label="Sign out"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            <ProfileDropdown />
           </div>
 
           {/* High-level Summary Statistics - Data-rich overview */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+          {/* Mobile: Vertical stack, Tablet: 2+1 grid, Desktop: 3 columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div className="bg-red-50 border-l-4 border-red-500 rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-red-900 mb-1">Critical</p>
-                  <p className="text-3xl font-bold text-red-700">{criticalCount}</p>
+                  <p className="text-xs sm:text-sm font-medium text-red-900 mb-1">{t('commandCenter.stats.critical.title')}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-red-700">{criticalCount}</p>
                 </div>
-                <AlertCircle className="w-10 h-10 text-red-500 opacity-80" />
+                <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 text-red-500 opacity-80" />
               </div>
-              <p className="text-xs text-red-700 mt-2">High glucose or diabetes risk - Immediate attention required</p>
+              <p className="text-xs text-red-700 mt-2">{t('commandCenter.stats.critical.description')}</p>
             </div>
 
-            <div className="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-4">
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 rounded-lg p-3 sm:p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-yellow-900 mb-1">Needs Attention</p>
-                  <p className="text-3xl font-bold text-yellow-700">{needsAttentionCount}</p>
+                  <p className="text-xs sm:text-sm font-medium text-yellow-900 mb-1">{t('commandCenter.stats.needsAttention.title')}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-yellow-700">{needsAttentionCount}</p>
                 </div>
-                <Activity className="w-10 h-10 text-yellow-500 opacity-80" />
+                <Activity className="w-8 h-8 sm:w-10 sm:h-10 text-yellow-500 opacity-80" />
               </div>
-              <p className="text-xs text-yellow-700 mt-2">TIR below 70% - Review recommended</p>
+              <p className="text-xs text-yellow-700 mt-2">{t('commandCenter.stats.needsAttention.description')}</p>
             </div>
 
-            <div className="bg-green-50 border-l-4 border-green-500 rounded-lg p-4">
+            <div className="bg-green-50 border-l-4 border-green-500 rounded-lg p-3 sm:p-4 sm:col-span-2 lg:col-span-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-green-900 mb-1">Stable</p>
-                  <p className="text-3xl font-bold text-green-700">{stableCount}</p>
+                  <p className="text-xs sm:text-sm font-medium text-green-900 mb-1">{t('commandCenter.stats.stable.title')}</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-green-700">{stableCount}</p>
                 </div>
-                <Users className="w-10 h-10 text-green-500 opacity-80" />
+                <Users className="w-8 h-8 sm:w-10 sm:h-10 text-green-500 opacity-80" />
               </div>
-              <p className="text-xs text-green-700 mt-2">Well-controlled - Continue monitoring</p>
+              <p className="text-xs text-green-700 mt-2">{t('commandCenter.stats.stable.description')}</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 lg:px-8 py-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         {/* Clean and Intuitive Search, Filter, and Sort Controls */}
-        <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200 mb-6">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-4">
-            {/* Search Bar - Prominent and easy to use */}
-            <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        {/* Mobile: Vertical stack, Tablet/Desktop: Horizontal */}
+        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-5 border border-gray-200 mb-4 sm:mb-6">
+          <div className="flex flex-col gap-3 sm:gap-4">
+            {/* Search Bar - Full width on mobile */}
+            <div className="relative w-full">
+              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search patients by name, email, or ID..."
-                className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                placeholder={t('commandCenter.search.placeholder')}
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
               />
             </div>
 
-            {/* Sort Dropdown - Clean design */}
-            <div className="flex items-center gap-3">
-              <Filter className="w-4 h-4 text-gray-500" />
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                className="px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer transition-all"
-              >
-                <option value="critical_first">Critical First</option>
-                <option value="stable_first">Stable First</option>
-                <option value="recent_first">Recently Added</option>
-                <option value="oldest_first">Oldest First</option>
-              </select>
-            </div>
+            {/* Filter and View Mode - Horizontal on mobile */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Sort Dropdown - Flexible width */}
+              <div className="flex items-center gap-2 sm:gap-3 flex-1">
+                <Filter className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="flex-1 px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer transition-all"
+                >
+                  <option value="critical_first">{t('commandCenter.sort.criticalFirst')}</option>
+                  <option value="stable_first">{t('commandCenter.sort.stableFirst')}</option>
+                  <option value="recent_first">{t('commandCenter.sort.recent')}</option>
+                  <option value="oldest_first">{t('commandCenter.sort.oldest')}</option>
+                </select>
+              </div>
 
-            {/* View Mode Toggle - Grid/List */}
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2.5 rounded-md transition-all ${
-                  viewMode === 'grid'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-                aria-label="Grid view"
-              >
-                <LayoutGrid className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`p-2.5 rounded-md transition-all ${
-                  viewMode === 'list'
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-                aria-label="List view"
-              >
-                <List className="w-5 h-5" />
-              </button>
+              {/* View Mode Toggle - Grid/List */}
+              <div className="flex gap-1 sm:gap-2 bg-gray-100 p-1 rounded-lg flex-shrink-0">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 sm:p-2.5 rounded-md transition-all ${
+                    viewMode === 'grid'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                  aria-label="Grid view"
+                >
+                  <LayoutGrid className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 sm:p-2.5 rounded-md transition-all ${
+                    viewMode === 'list'
+                      ? 'bg-white text-blue-600 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                  aria-label="List view"
+                >
+                  <List className="w-4 h-4 sm:w-5 sm:h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -333,20 +334,20 @@ export default function DoctorDashboard() {
         { loading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading patients...</p>
+            <p className="text-gray-600">{t('commandCenter.search.loading')}</p>
           </div>
         ) : patients.length === 0 ? (
           <div className="bg-white rounded-xl shadow-sm p-12 text-center border border-gray-200">
             <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No patients yet</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">{t('commandCenter.search.noPatients')}</h3>
             <p className="text-gray-600">
-              Patients will appear here once they grant you access to their data
+              {t('commandCenter.search.noPatientsDescription')}
             </p>
           </div>
         ) : (
           <div>
             {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
                 {sortedPatients.map((patient) => (
                   <PatientCard
                     key={patient.id}
@@ -356,7 +357,7 @@ export default function DoctorDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {sortedPatients.map((patient) => (
                   <PatientCard
                     key={patient.id}

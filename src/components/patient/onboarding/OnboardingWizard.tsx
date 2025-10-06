@@ -32,7 +32,7 @@ type Props = {
 // Multi-step wizard component
 // Design: Professional, trustworthy feel with clear progress indication
 export default function OnboardingWizard({ onComplete }: Props) {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const totalSteps = 4;
@@ -83,7 +83,12 @@ export default function OnboardingWizard({ onComplete }: Props) {
   };
 
   const handleBack = () => {
-    if (currentStep > 1) {
+    // If on the first step, log out and redirect to auth screen
+    if (currentStep === 1) {
+      signOut();
+      // Note: signOut() in AuthContext should handle the redirect to auth screen
+    } else {
+      // For all other steps, go back to the previous step
       setCurrentStep(prev => prev - 1);
     }
   };
@@ -252,15 +257,10 @@ export default function OnboardingWizard({ onComplete }: Props) {
           <div className="flex items-center justify-between mt-10 pt-6 border-t border-gray-200">
             <button
               onClick={handleBack}
-              disabled={currentStep === 1}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all ${
-                currentStep === 1
-                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md'
-              }`}
+              className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-sm transition-all bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back
+              {currentStep === 1 ? 'Cancel' : 'Back'}
             </button>
 
             <div className="flex-1 text-center mx-4">

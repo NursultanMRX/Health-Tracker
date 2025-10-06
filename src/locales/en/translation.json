@@ -1,0 +1,293 @@
+{
+  "helloUser": "Hello, {{name}}!",
+  "yourCurrentGlucose": "Your Current Glucose",
+  "lastUpdated": "Last updated",
+  "dashboard": "Dashboard",
+  "history": "History",
+  "charts": "Charts",
+  "yourHealthSummary": "Your Health Summary",
+  "timeInRange": "Time in Range",
+  "averageGlucose": "Average Glucose",
+  "totalLogs": "Total Logs",
+  "logYourData": "Log Your Data",
+  "useVoiceToLogData": "🎤 Use Voice to Log Data",
+  "logComprehensiveHealthData": "Log Comprehensive Health Data",
+  "logGlucose": "Log Glucose",
+  "logMeal": "Log Meal",
+  "logMedicine": "Log Medicine",
+  "logActivity": "Log Activity",
+  "howAreYouFeelingToday": "How are you feeling today?",
+  "mgdl": "mg/dL",
+  "lastDays": "Last {{count}} days",
+  "targetRange": "Target: {{low}}-{{high}} mg/dL",
+  "logYourHealthDataTitle": "Log Your Health Data",
+  "exerciseLevel": "Exercise Level",
+  "dietType": "Diet Type",
+  "sleepHours": "Sleep Hours (per day)",
+  "stressLevel": "Stress Level",
+  "mentalHealthCondition": "Mental Health Condition",
+  "workHoursPerWeek": "Work Hours Per Week",
+  "screenTimePerDay": "Screen Time Per Day (hours)",
+  "socialInteractionScore": "Social Interaction Score (1-10)",
+  "happinessScore": "Happiness Score (1-10)",
+  "hba1cLevel": "HbA1c Level (%)",
+  "bloodGlucoseLevel": "Blood Glucose Level (mg/dL)",
+  "cancelButton": "Cancel",
+  "saveButton": "Save Health Data",
+  "placeholder_e_g_40": "e.g., 40",
+  "placeholder_e_g_8_5": "e.g., 8.5",
+  "voiceInput": "Voice Input",
+  "selectLanguage": "Select Language",
+  "startRecording": "Start Recording",
+  "stopRecording": "Stop Recording",
+  "audioRecorded": "Audio recorded successfully",
+  "recordAgain": "Record Again",
+  "or": "OR",
+  "uploadAudioFile": "Upload Audio File",
+  "voiceInputInstructions": "📝 How to use voice input:",
+  "speakClearlyAndSlowly": "Speak clearly and slowly",
+  "includeAllRelevantHealthData": "Include all relevant health data",
+  "exampleVoiceInput": "Example: \"I work 45 hours per week. Social interaction score is 8 out of 10.\"",
+  "processing": "Processing...",
+  "processAudio": "Process Audio",
+  "modals": {
+    "logGlucose": {
+      "title": "Log Glucose",
+      "readingLabel": "Glucose Reading",
+      "measurementQuestion": "When did you measure?",
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "dinner": "Dinner",
+      "bedtime": "Bedtime",
+      "beforeExercise": "Before Exercise",
+      "fasting": "Fasting",
+      "random": "Random"
+    },
+    "logMeal": {
+      "title": "Log Meal",
+      "whatDidYouEatLabel": "What did you eat?",
+      "whatDidYouEatPlaceholder": "e.g., Chicken salad",
+      "portionSizeLabel": "Portion Size",
+      "small": "Small",
+      "medium": "Medium",
+      "large": "Large",
+      "carbohydratesLabel": "Carbohydrates (optional)",
+      "grams": "grams"
+    },
+    "logMedicine": {
+      "title": "Log Medicine",
+      "medicationNameLabel": "Medication Name",
+      "medicationNamePlaceholder": "e.g., Metformin",
+      "doseLabel": "Dose",
+      "dosePlaceholder": "e.g., 500 mg",
+      "statusLabel": "Status",
+      "taken": "Taken",
+      "missed": "Missed",
+      "delayed": "Delayed"
+    },
+    "logActivity": {
+      "title": "Log Activity",
+      "activityTypeLabel": "Activity Type",
+      "walk": "Walk",
+      "briskWalk": "Brisk Walk",
+      "jog": "Jog",
+      "householdChores": "Household Chores",
+      "gym": "Gym",
+      "durationLabel": "Duration",
+      "minutes": "minutes",
+      "intensityLabel": "Intensity",
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "logFeeling": {
+      "title": "How are you feeling?",
+      "selectMoodLabel": "Select your mood",
+      "veryCalm": "Very calm",
+      "calm": "Calm",
+      "neutral": "Neutral",
+      "stressed": "Stressed",
+      "veryStressed": "Very stressed",
+      "describeFeelingPlaceholder": "Describe how you're feeling..."
+    }
+  },
+  "common": {
+    "timeLabel": "Time",
+    "optionalNoteLabel": "Note (optional)",
+    "addNotePlaceholder": "Add any notes..."
+  },
+  "buttons": {
+    "saveReading": "Save Reading",
+    "saveMeal": "Save Meal",
+    "saveMedication": "Save Medication",
+    "saveActivity": "Save Activity",
+    "saveFeeling": "Save Feeling"
+  },
+  "profileMenu": {
+    "settings": "Settings",
+    "language": "Language",
+    "logout": "Logout"
+  },
+  "languageNames": {
+    "english": "English",
+    "karakalpak": "Karakalpak",
+    "russian": "Russian",
+    "uzbek": "Uzbek"
+  },
+  "commandCenter": {
+    "header": {
+      "title": "Command Center",
+      "welcomeBack": "Welcome back, Dr. {{name}}"
+    },
+    "stats": {
+      "critical": {
+        "title": "Critical",
+        "description": "High glucose or diabetes risk - Immediate attention required"
+      },
+      "needsAttention": {
+        "title": "Needs Attention",
+        "description": "TIR below 70% - Review recommended"
+      },
+      "stable": {
+        "title": "Stable",
+        "description": "Well-controlled - Continue monitoring"
+      }
+    },
+    "search": {
+      "placeholder": "Search patients...",
+      "loading": "Loading patients...",
+      "noPatients": "No patients yet",
+      "noPatientsDescription": "Patients will appear here once they grant you access to their data"
+    },
+    "sort": {
+      "criticalFirst": "Critical First",
+      "stableFirst": "Stable First",
+      "recent": "Recent",
+      "oldest": "Oldest"
+    },
+    "patientCard": {
+      "status": {
+        "critical": "Critical",
+        "noData": "No Data",
+        "review": "Review",
+        "stable": "Stable"
+      },
+      "labels": {
+        "risk": "Risk",
+        "current": "Current",
+        "tir": "TIR",
+        "currentGlucose": "Current Glucose",
+        "timeInRange": "Time in Range",
+        "last14Days": "Last 14 days",
+        "target": "Target: {{low}}-{{high}} mg/dL",
+        "diabetesRisk": "Diabetes Risk",
+        "noGlucoseData": "No glucose data available",
+        "patientHasntLogged": "Patient hasn't logged any readings"
+      },
+      "demographics": {
+        "age": "{{age}} years",
+        "ageUnknown": "Age unknown",
+        "male": "Male",
+        "female": "Female",
+        "other": "Other"
+      }
+    }
+  },
+  "export": {
+    "buttonLabel": "Download Report",
+    "asPDF": "Download as PDF",
+    "asCSV": "Download as CSV",
+    "exporting": "Generating report..."
+  },
+  "patientRecords": {
+    "header": {
+      "title": "Patient Medical Records",
+      "viewing": "Viewing: {{patientName}} ({{patientEmail}})",
+      "doctorView": "Doctor View"
+    },
+    "tabs": {
+      "analytics": "Glucose Analytics",
+      "history": "Medical History",
+      "notes": "Clinical Notes"
+    },
+    "monitoring": {
+      "title": "Glucose Monitoring Data",
+      "patientLabel": "Patient: {{patientName}}",
+      "last7Days": "Last 7 days",
+      "last14Days": "Last 14 days",
+      "last30Days": "Last 30 days"
+    },
+    "riskAssessment": {
+      "title": "Diabetes Risk Assessment",
+      "riskPercentage": "Risk Percentage",
+      "riskLevel": "Risk Level",
+      "recommendation": "Recommendation",
+      "recommendationTextHigh": "Your diabetes risk is high! Please consult a doctor immediately and get a complete checkup.",
+      "recommendationTextMedium": "Your diabetes risk is moderate. Consult with a doctor and monitor your diet carefully.",
+      "recommendationTextLow": "Your diabetes risk is low. Continue maintaining a healthy lifestyle!",
+      "riskLevelValue": {
+        "high": "High",
+        "medium": "Medium",
+        "low": "Low"
+      }
+    },
+    "clinicalSummary": {
+      "title": "Clinical Summary - Last {{days}} Days",
+      "meanGlucose": "Mean Glucose",
+      "target": "Target: {{range}}",
+      "timeInRange": "Time in Range (TIR)",
+      "adaTarget": "ADA Target: >{{value}}%"
+    },
+    "trendAnalysis": {
+      "title": "Glucose Trend Analysis ({{days}} days)",
+      "description": "Patient's mean glucose: {{value}} mg/dL over the last {{days}} days",
+      "graphValue": "value",
+      "graphCount": "count"
+    },
+    "distributionAnalysis": {
+      "title": "Glucose Distribution Analysis",
+      "description": "Clinical breakdown of readings by glucose range categories",
+      "yAxisLabel": "Count"
+    },
+    "tirAnalysis": {
+      "title": "Time in Range (TIR) Analysis",
+      "description": "{{percentage}}% of patient's readings are within target range ({{range}})",
+      "inRange": "In Range ({{range}})",
+      "belowRange": "Below Range (<{{value}})",
+      "aboveRange": "Above Range (>{{value}})"
+    },
+    "assessment": {
+      "title": "Clinical Assessment",
+      "excellentControl": "Excellent glucose control. Patient is meeting ADA targets for time in range.",
+      "moderateControl": "Moderate glucose control. Consider medication adjustment or lifestyle modifications to improve time in range.",
+      "suboptimalControl": "Suboptimal glucose control. Recommend immediate intervention - consider medication review, dietary counseling, or insulin adjustment."
+    },
+    "loading": "Loading patient data..."
+  },
+  "notifications": {
+    "highRiskCritical": {
+      "title": "Important Health Alert",
+      "body": "Your diabetes risk is critically high. Please consult a doctor immediately and get a complete checkup."
+    },
+    "glucoseSpikeCritical": {
+      "title": "Critically High Glucose Level!",
+      "body": "Your glucose reading is {{value}} mg/dL. If you feel unwell, please seek emergency medical help. Drink more water."
+    },
+    "consistentHighWarning": {
+      "title": "Glucose Trend Warning",
+      "body": "Your glucose levels have been consistently high for the last 3 days. We recommend contacting your doctor to discuss your routine."
+    },
+    "logDataReminder": {
+      "title": "Daily Reminder",
+      "body": "Hello! Don't forget to log your glucose reading and meals for today. This helps you better track your health."
+    },
+    "positiveReinforcement": {
+      "title": "Great Job!",
+      "body": "Congratulations! Your readings are within the target range. Keep up the great work, you're doing everything right!"
+    },
+    "patternDetectedTip": {
+      "title": "A Helpful Tip",
+      "body": "We've noticed your glucose tends to spike after dinner. It might be helpful to review your evening meals."
+    }
+  }
+}

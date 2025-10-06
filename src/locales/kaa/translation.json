@@ -1,0 +1,278 @@
+{
+  "helloUser": "Sálem, {{name}}!",
+  "yourCurrentGlucose": "Siziń Házirgi Glyukozańız",
+  "lastUpdated": "Sońǵı jańalanıw",
+  "dashboard": "Bas panel",
+  "history": "Tariyx",
+  "charts": "Grafikler",
+  "yourHealthSummary": "Siziń Densawlıq Esabatıńız",
+  "timeInRange": "Norma Aralıǵındaǵı Waqıt",
+  "averageGlucose": "Ortasha Glyukoza",
+  "totalLogs": "Ulıwma Jazıwlar",
+  "logYourData": "Maǵlıwmatlarıńızdı Kirgiziń",
+  "logComprehensiveHealthData": "Densawlıq haqqında tolıq maǵlıwmat kirgiziw",
+  "logGlucose": "Glyukoza kirgiziw",
+  "logMeal": "Awqatlanıw kirgiziw",
+  "logMedicine": "Dári kirgiziw",
+  "logActivity": "Aktivlik kirgiziw",
+  "howAreYouFeelingToday": "Búgin ózińizdi qalay sezip atırsız?",
+  "mgdl": "mg/dL",
+  "lastDays": "Sońǵı {{count}} kún",
+  "targetRange": "Maqset: {{low}}-{{high}} mg/dL",
+  "logYourHealthDataTitle": "Densawlıq maǵlıwmatlarıńızdı kirgiziw",
+  "exerciseLevel": "Játtiqiw dáreǵesi",
+  "dietType": "Dieta túri",
+  "sleepHours": "Uyklash saaatları (kúnine)",
+  "stressLevel": "Stress dáreǵesi",
+  "mentalHealthCondition": "Psixikalıq densawlıq aǵzası",
+  "workHoursPerWeek": "Hápte ishchi saatlar",
+  "screenTimePerDay": "Ekran waqtı kúnine (saatlar)",
+  "socialInteractionScore": "Áleymettik baylanıs baǵası (1-10)",
+  "happinessScore": "Baxtiýarlıq baǵası (1-10)",
+  "hba1cLevel": "HbA1c dáreǵesi (%)",
+  "bloodGlucoseLevel": "Qan glyukoza dáreǵesi (mg/dL)",
+  "cancelButton": "Biykar etiw",
+  "saveButton": "Densawlıq maǵlıwmatların saqlaw",
+  "placeholder_e_g_40": "mısalı, 40",
+  "placeholder_e_g_8_5": "mısalı, 8.5",
+  "modals": {
+    "logGlucose": {
+      "title": "Glukoza kirgiziw",
+      "readingLabel": "Glukoza kórsetkishi",
+      "measurementQuestion": "Qashan ólshedińiz?",
+      "breakfast": "Azanǵı awqat",
+      "lunch": "Túski awqat",
+      "dinner": "Keshki awqat",
+      "bedtime": "Uyqıdan aldın",
+      "beforeExercise": "Shınıǵıwdan aldın",
+      "fasting": "Ash qarınǵa",
+      "random": "Kezdeysoq"
+    },
+    "logMeal": {
+      "title": "Awqatlanıw kirgiziw",
+      "whatDidYouEatLabel": "Ne jedińiz?",
+      "whatDidYouEatPlaceholder": "Mısalı, tawıq salatı",
+      "portionSizeLabel": "Porsiya ólshemi",
+      "small": "Kishi",
+      "medium": "Orta",
+      "large": "Úlken",
+      "carbohydratesLabel": "Uglevodlar (májbúriy emes)",
+      "grams": "gramm"
+    },
+    "logMedicine": {
+      "title": "Dári kirgiziw",
+      "medicationNameLabel": "Dári atı",
+      "medicationNamePlaceholder": "Mısalı, Metformin",
+      "doseLabel": "Doza",
+      "dosePlaceholder": "Mısalı, 500 mg",
+      "statusLabel": "Statusı",
+      "taken": "Ishildi",
+      "missed": "Ishilmedi",
+      "delayed": "Keshiktirildi"
+    },
+    "logActivity": {
+      "title": "Is-háreket kirgiziw",
+      "activityTypeLabel": "Is-háreket túri",
+      "walk": "Júriw",
+      "briskWalk": "Tez júriw",
+      "jog": "Júgiriw",
+      "householdChores": "Úy jumısları",
+      "gym": "Zal",
+      "durationLabel": "Dawamlılıǵı",
+      "minutes": "minut",
+      "intensityLabel": "Intensivligi",
+      "low": "Tómen",
+      "medium": "Orta",
+      "high": "Joqarı"
+    },
+    "logFeeling": {
+      "title": "Keypiyatıńız qalay?",
+      "selectMoodLabel": "Keypiyatıńızdı saylań",
+      "veryCalm": "Júdá tınısh",
+      "calm": "Tınısh",
+      "neutral": "Biyparq",
+      "stressed": "Stressli",
+      "veryStressed": "Júdá stressli",
+      "describeFeelingPlaceholder": "Keypiyatıńızdı súwretleń..."
+    }
+  },
+  "common": {
+    "timeLabel": "Waqıt",
+    "optionalNoteLabel": "Qosımsha jazıw (májbúriy emes)",
+    "addNotePlaceholder": "Qálegen jazıw qosıń..."
+  },
+  "buttons": {
+    "saveReading": "Kórsetkishti saqlaw",
+    "saveMeal": "Awqattı saqlaw",
+    "saveMedication": "Dárini saqlaw",
+    "saveActivity": "Is-háreketti saqlaw",
+    "saveFeeling": "Keypiyattı saqlaw"
+  },
+  "profileMenu": {
+    "settings": "Sazlawlar",
+    "language": "Til",
+    "logout": "Shıǵıw"
+  },
+  "languageNames": {
+    "english": "Ingliz tili",
+    "karakalpak": "Qaraqalpaqsha",
+    "russian": "Orıs tili",
+    "uzbek": "Ózbek tili"
+  },
+  "commandCenter": {
+    "header": {
+      "title": "Basqarıw Merkezi",
+      "welcomeBack": "Qaytta kelińiz, Dr. {{name}}"
+    },
+    "stats": {
+      "critical": {
+        "title": "Kritikalıq",
+        "description": "Joqarı glyukoza yamasa diabet tawekeli - Derrew dıqqat talap etiledi"
+      },
+      "needsAttention": {
+        "title": "Dıqqat Talap Etedi",
+        "description": "TIR 70%-dan tómen - Tekseristi úsınıs etiledi"
+      },
+      "stable": {
+        "title": "Turaqtı",
+        "description": "Jaqsı basqarılıw - Monitortı dawam ettiw"
+      }
+    },
+    "search": {
+      "placeholder": "Nauqaslar izlew...",
+      "loading": "Nauqaslar júktelmoqta...",
+      "noPatients": "Házirshe nauqaslar joq",
+      "noPatientsDescription": "Nauqaslar siziń maǵlıwmatlarıńızǵa qatnas bergende kórsetiledi"
+    },
+    "sort": {
+      "criticalFirst": "Kritikalıq áldiymenen",
+      "stableFirst": "Turaqtı áldiymenen",
+      "recent": "Eń jańa",
+      "oldest": "Eń eski"
+    },
+    "patientCard": {
+      "status": {
+        "critical": "Kritikalıq",
+        "noData": "Maǵlıwmat joq",
+        "review": "Tekseristi",
+        "stable": "Turaqtı"
+      },
+      "labels": {
+        "risk": "Tawekeli",
+        "current": "Házirgi",
+        "tir": "TIR",
+        "currentGlucose": "Házirgi glyukoza",
+        "timeInRange": "Diapazonındaǵı waqt",
+        "last14Days": "Sońǵı 14 kún",
+        "target": "Maqset: {{low}}-{{high}} mg/dL",
+        "diabetesRisk": "Diabet tawekeli",
+        "noGlucoseData": "Glyukoza maǵlıwmatları joq",
+        "patientHasntLogged": "Nauqas kórsetkishlerin jazǵan emes"
+      },
+      "demographics": {
+        "age": "{{age}} jas",
+        "ageUnknown": "Jası belgisiz",
+        "male": "Erkek",
+        "female": "Hayal",
+        "other": "Basqa"
+      }
+    }
+  },
+  "export": {
+    "buttonLabel": "Esapatnı júklewge alıw",
+    "asPDF": "PDF retinde júklewge alıw",
+    "asCSV": "CSV retinde júklewge alıw",
+    "exporting": "Esapat jasalmoqta..."
+  },
+  "patientRecords": {
+    "header": {
+      "title": "Pacienttiń medicina kartası",
+      "viewing": "Kóriw: {{patientName}} ({{patientEmail}})",
+      "doctorView": "Shıpaker kórinisi"
+    },
+    "tabs": {
+      "analytics": "Glikoza Analitikası",
+      "history": "Medicina Tariyxı",
+      "notes": "Klinikalıq eskertpeler"
+    },
+    "monitoring": {
+      "title": "Glikoza monitoringi maǵlıwmatları",
+      "patientLabel": "Pacient: {{patientName}}",
+      "last7Days": "Sońǵı 7 kún",
+      "last14Days": "Sońǵı 14 kún",
+      "last30Days": "Sońǵı 30 kún"
+    },
+    "riskAssessment": {
+      "title": "Qant diyabeti qáwpin bahalaw",
+      "riskPercentage": "Qáwip Procenti",
+      "riskLevel": "Qáwip Dȧrejesi",
+      "recommendation": "Usınıs",
+      "recommendationTextHigh": "Sizde qant diyabeti qáwpi joqarı! Tez arada shıpakerge kóriniń hám tolıq tekseriwden ótiń.",
+      "recommendationTextMedium": "Sizde qant diyabeti qáwpi ortasha. Shıpaker menen maslahat alıń hám diyetańızdı dıqqat penen qadaǵalań.",
+      "recommendationTextLow": "Sizde qant diyabeti qáwpi tómen. Sáwbet turmıs tárzin dawam ettiriń!",
+      "riskLevelValue": {
+        "high": "Joqarı",
+        "medium": "Orta",
+        "low": "Tómen"
+      }
+    },
+    "clinicalSummary": {
+      "title": "Klinikalıq juwmaq - Sońǵı {{days}} kún",
+      "meanGlucose": "Ortasha Glikoza",
+      "target": "Maqset: {{range}}",
+      "timeInRange": "Kórsetkish aralıǵı (TIR)",
+      "adaTarget": "ADA Maqseti: >{{value}}%"
+    },
+    "trendAnalysis": {
+      "title": "Glikoza trendiniń analizi ({{days}} kún)",
+      "description": "Pacienttiń ortasha glikozası: sońǵı {{days}} kúnde {{value}} mg/dL",
+      "graphValue": "mánisi",
+      "graphCount": "sanı"
+    },
+    "distributionAnalysis": {
+      "title": "Glikoza bólistiriw analizi",
+      "description": "Glikoza kórsetkishlerin diapazon kategoriyaları boyınsha bólistiriw",
+      "yAxisLabel": "Sanı"
+    },
+    "tirAnalysis": {
+      "title": "Kórsetkish aralıǵı (TIR) analizi",
+      "description": "Pacient kórsetkishleriniń {{percentage}}% maqsetli diapazon ishinde ({{range}})",
+      "inRange": "Aralıqta ({{range}})",
+      "belowRange": "Aralıqtan tómen (<{{value}})",
+      "aboveRange": "Aralıqtan joqarı (>{{value}})"
+    },
+    "assessment": {
+      "title": "Klinikalıq bahalaw",
+      "excellentControl": "Glikozanıń ájayıp qadaǵalanıwı. Pacient kórsetkish aralıǵı boyınsha ADA maqsetlerine erisip atır.",
+      "moderateControl": "Glikozanıń ortasha qadaǵalanıwı. Kórsetkish aralıǵın jaqsılastırıw ushın dári kórriktirowdi yamasa turmıs tárzin ózgertiwin qarap shıǵıń.",
+      "suboptimalControl": "Glikozanıń optimal emes qadaǵalanıwı. Derrew aralasıw usınıs etiledi - dárilerdi qayta qaraw, diyetikalıq maslahat yamasa insulin kórriktirowdi qarap shıǵıń."
+    },
+    "loading": "Pacient maǵlıwmatları júktelmoqta..."
+  },
+  "notifications": {
+    "highRiskCritical": {
+      "title": "Densawlıq haqqında áhmiyetli eskertiw",
+      "body": "Sizde qant diyabeti qáwpi júdá joqarı. Keshiktirmey shıpaker menen másláhátlesip, tolıq medicina kórneктен ótiwińiz kerek."
+    },
+    "glucoseSpikeCritical": {
+      "title": "Glikoza dárejesi júdá joqarı!",
+      "body": "Glikoza kórsetkishińiz {{value}} mg/dL. Eger ózińizdi jaman sezseńiz, tez járdemge xabarlasıń. Kóbirek suw ishiń."
+    },
+    "consistentHighWarning": {
+      "title": "Glikoza trendine dıqqat awdarıń",
+      "body": "Sońǵı 3 kún dawamında glikoza kórsetkishlerińiz turaqlı túrde joqarı. Shıpakerińiz benen xabarlasıp, kún tártibińizdi talqılawdı usınıs etemiz."
+    },
+    "logDataReminder": {
+      "title": "Kúndelikli esletpe",
+      "body": "Sálem! Búgingi glikoza kórsetkishińizdi hám awqatlanıwıńızdı kirgiziwdi umıtpań. Bul sizge densawlıǵıńızdı jaqsıraq qadaǵalawǵa járdem beredi."
+    },
+    "positiveReinforcement": {
+      "title": "Ájayıp nátiyje!",
+      "body": "Qutlıqlaymız! Sizdiń kórsetkishlerińiz maqsetli aralıqta. Usı tempte dawam etiń, siz hámmesin durıs islep atırsız!"
+    },
+    "patternDetectedTip": {
+      "title": "Paydalı usınıs",
+      "body": "Biz sizdiń glikozańızdıń keshki awqattan keyin kóbirek kóterilip atırǵanın bayqadıq. Keshki awqatıńızdıń quramın baqlap kóriń."
+    }
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "helloUser": "Salom, {{name}}!",
+  "yourCurrentGlucose": "Sizning joriy glyukozangiz",
+  "lastUpdated": "Oxirgi yangilanish",
+  "dashboard": "Boshqaruv paneli",
+  "history": "Tarix",
+  "charts": "Jadvallar",
+  "yourHealthSummary": "Salomatligingiz haqida qisqacha ma'lumot",
+  "timeInRange": "Belgilangan oraliqdagi vaqt",
+  "averageGlucose": "O'rtacha glyukoza",
+  "totalLogs": "Jami yozuvlar",
+  "logYourData": "Ma'lumotlaringizni kiriting",
+  "useVoiceToLogData": "🎤 Ovozli kiritish",
+  "logComprehensiveHealthData": "Salomatlik haqida to'liq ma'lumotlarni kiriting",
+  "logGlucose": "Glyukoza kiritish",
+  "logMeal": "Ovqatlanishni kiritish",
+  "logMedicine": "Dorilarni kiritish",
+  "logActivity": "Faollikni kiritish",
+  "howAreYouFeelingToday": "Bugun o'zingizni qanday his qilyapsiz?",
+  "mgdl": "mg/dL",
+  "lastDays": "Oxirgi {{count}} kun",
+  "targetRange": "Maqsad: {{low}}-{{high}} mg/dL",
+  "logYourHealthDataTitle": "Salomatlik ma'lumotlaringizni kiriting",
+  "exerciseLevel": "Jismoniy mashqlar darajasi",
+  "dietType": "Parhez turi",
+  "sleepHours": "Uyqu soatlari (kuniga)",
+  "stressLevel": "Stress darajasi",
+  "mentalHealthCondition": "Ruhiy salomatlik holati",
+  "workHoursPerWeek": "Haftasiga ish soatlari",
+  "screenTimePerDay": "Kuniga ekran vaqti (soat)",
+  "socialInteractionScore": "Ijtimoiy o'zaro ta'sir darajasi (1-10)",
+  "happinessScore": "Baxt darajasi (1-10)",
+  "hba1cLevel": "HbA1c darajasi (%)",
+  "bloodGlucoseLevel": "Qondagi glyukoza darajasi (mg/dL)",
+  "cancelButton": "Bekor qilish",
+  "saveButton": "Salomatlik ma'lumotlarini saqlash",
+  "placeholder_e_g_40": "masalan, 40",
+  "placeholder_e_g_8_5": "masalan, 8.5",
+  "voiceInput": "Ovozli kiritish",
+  "selectLanguage": "Tilni tanlang",
+  "startRecording": "Yozishni boshlash",
+  "stopRecording": "Yozishni to'xtatish",
+  "audioRecorded": "Audio muvaffaqiyatli yozildi",
+  "recordAgain": "Qayta yozish",
+  "or": "YOKI",
+  "uploadAudioFile": "Audio fayl yuklash",
+  "voiceInputInstructions": "📝 Ovozli kiritishdan qanday foydalanish:",
+  "speakClearlyAndSlowly": "Aniq va sekin gapiring",
+  "includeAllRelevantHealthData": "Barcha zarur salomatlik ma'lumotlarini kiriting",
+  "exampleVoiceInput": "Misol: \"Men haftasiga 45 soat ishlayman. Ijtimoiy muloqot darajasi 8 dan 10.\"",
+  "processing": "Qayta ishlanmoqda...",
+  "processAudio": "Audioni qayta ishlash",
+  "modals": {
+    "logGlucose": {
+      "title": "Glyukoza kiritish",
+      "readingLabel": "Glyukoza ko'rsatkichi",
+      "measurementQuestion": "Qachon o'lchadingiz?",
+      "breakfast": "Nonushta",
+      "lunch": "Tushlik",
+      "dinner": "Kechki ovqat",
+      "bedtime": "Uyqudan oldin",
+      "beforeExercise": "Mashqdan oldin",
+      "fasting": "Och qoringa",
+      "random": "Tasodifiy"
+    },
+    "logMeal": {
+      "title": "Ovqatlanishni kiritish",
+      "whatDidYouEatLabel": "Nima yedingiz?",
+      "whatDidYouEatPlaceholder": "Masalan, Tovuq salati",
+      "portionSizeLabel": "Porsiya hajmi",
+      "small": "Kichik",
+      "medium": "O'rtacha",
+      "large": "Katta",
+      "carbohydratesLabel": "Uglevodlar (ixtiyoriy)",
+      "grams": "gramm"
+    },
+    "logMedicine": {
+      "title": "Dori kiritish",
+      "medicationNameLabel": "Dori nomi",
+      "medicationNamePlaceholder": "Masalan, Metformin",
+      "doseLabel": "Doza",
+      "dosePlaceholder": "Masalan, 500 mg",
+      "statusLabel": "Holati",
+      "taken": "Qabul qilindi",
+      "missed": "O'tkazib yuborildi",
+      "delayed": "Kechiktirildi"
+    },
+    "logActivity": {
+      "title": "Faollikni kiritish",
+      "activityTypeLabel": "Faollik turi",
+      "walk": "Piyoda yurish",
+      "briskWalk": "Tez yurish",
+      "jog": "Yugurish",
+      "householdChores": "Uy ishlari",
+      "gym": "Sport zal",
+      "durationLabel": "Davomiyligi",
+      "minutes": "daqiqa",
+      "intensityLabel": "Jadallik",
+      "low": "Past",
+      "medium": "O'rtacha",
+      "high": "Yuqori"
+    },
+    "logFeeling": {
+      "title": "O'zingizni qanday his qilyapsiz?",
+      "selectMoodLabel": "Kayfiyatingizni tanlang",
+      "veryCalm": "Juda xotirjam",
+      "calm": "Xotirjam",
+      "neutral": "Betaraf",
+      "stressed": "Stressda",
+      "veryStressed": "Juda stressda",
+      "describeFeelingPlaceholder": "O'zingizni qanday his qilayotganingizni tasvirlang..."
+    }
+  },
+  "common": {
+    "timeLabel": "Vaqt",
+    "optionalNoteLabel": "Eslatma (ixtiyoriy)",
+    "addNotePlaceholder": "Har qanday eslatmani qo'shing..."
+  },
+  "buttons": {
+    "saveReading": "Ko'rsatkichni saqlash",
+    "saveMeal": "Ovqatni saqlash",
+    "saveMedication": "Dorini saqlash",
+    "saveActivity": "Faollikni saqlash",
+    "saveFeeling": "Kayfiyatni saqlash"
+  },
+  "profileMenu": {
+    "settings": "Sozlamalar",
+    "language": "Til",
+    "logout": "Chiqish"
+  },
+  "languageNames": {
+    "english": "Ingliz tili",
+    "karakalpak": "Qoraqalpoqcha",
+    "russian": "Rus tili",
+    "uzbek": "O'zbek tili"
+  },
+  "commandCenter": {
+    "header": {
+      "title": "Boshqaruv markazi",
+      "welcomeBack": "Xush kelibsiz, Doktor {{name}}"
+    },
+    "stats": {
+      "critical": {
+        "title": "Kritik",
+        "description": "Yuqori glyukoza yoki diabet xavfi - Zudlik bilan chora ko'rish talab etiladi"
+      },
+      "needsAttention": {
+        "title": "Diqqat talab",
+        "description": "TIR 70% dan past - Qayta ko'rib chiqish tavsiya etiladi"
+      },
+      "stable": {
+        "title": "Barqaror",
+        "description": "Nazorat ostida - Monitoringni davom ettiring"
+      }
+    },
+    "search": {
+      "placeholder": "Bemorlarni qidirish...",
+      "loading": "Bemorlar yuklanmoqda...",
+      "noPatients": "Hozircha bemorlar yo'q",
+      "noPatientsDescription": "Bemorlar o'z ma'lumotlariga kirishga ruxsat berganlaridan so'ng shu yerda paydo bo'ladi"
+    },
+    "sort": {
+      "criticalFirst": "Avval kritiklar",
+      "stableFirst": "Avval barqarorlar",
+      "recent": "Eng yangilari",
+      "oldest": "Eng eskilar"
+    },
+    "patientCard": {
+      "status": {
+        "critical": "Kritik",
+        "noData": "Ma'lumot yo'q",
+        "review": "Ko'rib chiqish",
+        "stable": "Barqaror"
+      },
+      "labels": {
+        "risk": "Xavf",
+        "current": "Joriy",
+        "tir": "TIR",
+        "currentGlucose": "Joriy glyukoza",
+        "timeInRange": "Belgilangan oraliqdagi vaqt",
+        "last14Days": "Oxirgi 14 kun",
+        "target": "Maqsad: {{low}}-{{high}} mg/dL",
+        "diabetesRisk": "Diabet xavfi",
+        "noGlucoseData": "Glyukoza haqida ma'lumot mavjud emas",
+        "patientHasntLogged": "Bemor hali hech qanday ko'rsatkich kiritmagan"
+      },
+      "demographics": {
+        "age": "{{age}} yosh",
+        "ageUnknown": "Yoshi noma'lum",
+        "male": "Erkak",
+        "female": "Ayol",
+        "other": "Boshqa"
+      }
+    }
+  },
+  "export": {
+    "buttonLabel": "Hisobotni yuklab olish",
+    "asPDF": "PDF sifatida yuklab olish",
+    "asCSV": "CSV sifatida yuklab olish",
+    "exporting": "Hisobot yaratilmoqda..."
+  },
+  "patientRecords": {
+    "header": {
+      "title": "Bemorning tibbiy yozuvlari",
+      "viewing": "Ko'rish: {{patientName}} ({{patientEmail}})",
+      "doctorView": "Shifokor ko'rinishi"
+    },
+    "tabs": {
+      "analytics": "Glyukoza tahlili",
+      "history": "Tibbiy tarix",
+      "notes": "Klinik qaydlar"
+    },
+    "monitoring": {
+      "title": "Glyukoza monitoringi ma'lumotlari",
+      "patientLabel": "Bemor: {{patientName}}",
+      "last7Days": "Oxirgi 7 kun",
+      "last14Days": "Oxirgi 14 kun",
+      "last30Days": "Oxirgi 30 kun"
+    },
+    "riskAssessment": {
+      "title": "Diabet xavfini baholash",
+      "riskPercentage": "Xavf foizi",
+      "riskLevel": "Xavf darajasi",
+      "recommendation": "Tavsiya",
+      "recommendationTextHigh": "Sizda diabet xavfi yuqori! Iltimos, zudlik bilan shifokorga murojaat qiling va to'liq tibbiy ko'rikdan o'ting.",
+      "recommendationTextMedium": "Sizda diabet xavfi o'rtacha. Shifokor bilan maslahatlashing va parhezingizni diqqat bilan kuzatib boring.",
+      "recommendationTextLow": "Sizda diabet xavfi past. Sog'lom turmush tarzini davom ettiring!",
+      "riskLevelValue": {
+        "high": "Yuqori",
+        "medium": "O'rtacha",
+        "low": "Past"
+      }
+    },
+    "clinicalSummary": {
+      "title": "Klinik xulosa - Oxirgi {{days}} kun",
+      "meanGlucose": "O'rtacha glyukoza",
+      "target": "Maqsad: {{range}}",
+      "timeInRange": "Belgilangan oraliqdagi vaqt (TIR)",
+      "adaTarget": "ADA maqsadi: >{{value}}%"
+    },
+    "trendAnalysis": {
+      "title": "Glyukoza tendensiyasi tahlili ({{days}} kun)",
+      "description": "Bemorning oxirgi {{days}} kundagi o'rtacha glyukozasi: {{value}} mg/dL",
+      "graphValue": "qiymat",
+      "graphCount": "soni"
+    },
+    "distributionAnalysis": {
+      "title": "Glyukoza taqsimoti tahlili",
+      "description": "Ko'rsatkichlarning glyukoza diapazoni toifalari bo'yicha klinik taqsimoti",
+      "yAxisLabel": "Soni"
+    },
+    "tirAnalysis": {
+      "title": "Belgilangan oraliqdagi vaqt (TIR) tahlili",
+      "description": "Bemor ko'rsatkichlarining {{percentage}}% maqsadli diapazon ichida ({{range}})",
+      "inRange": "Oraliqda ({{range}})",
+      "belowRange": "Oraliqdan past (<{{value}})",
+      "aboveRange": "Oraliqdan yuqori (>{{value}})"
+    },
+    "assessment": {
+      "title": "Klinik baholash",
+      "excellentControl": "Glyukozani a'lo darajada nazorat qilish. Bemor belgilangan oraliqdagi vaqt bo'yicha ADA maqsadlariga erishmoqda.",
+      "moderateControl": "Glyukozani o'rtacha nazorat qilish. Belgilangan oraliqdagi vaqtni yaxshilash uchun dori-darmonlarni o'zgartirish yoki turmush tarzini o'zgartirishni ko'rib chiqing.",
+      "suboptimalControl": "Glyukozani qoniqarsiz nazorat qilish. Zudlik bilan aralashuv tavsiya etiladi - dori-darmonlarni ko'rib chiqish, parhez bo'yicha maslahat yoki insulin dozasini o'zgartirishni o'ylab ko'ring."
+    },
+    "loading": "Bemor ma'lumotlari yuklanmoqda..."
+  },
+  "notifications": {
+    "highRiskCritical": {
+      "title": "Salomatlik haqida muhim ogohlantirish",
+      "body": "Sizda diabet xavfi juda yuqori. Iltimos, zudlik bilan shifokorga murojaat qiling va to'liq tibbiy ko'rikdan o'ting."
+    },
+    "glucoseSpikeCritical": {
+      "title": "Glyukoza darajasi juda yuqori!",
+      "body": "Sizning glyukoza ko'rsatkichingiz {{value}} mg/dL. Agar o'zingizni yomon his qilsangiz, tez yordamga murojaat qiling. Ko'proq suv iching."
+    },
+    "consistentHighWarning": {
+      "title": "Glyukoza tendensiyasi haqida ogohlantirish",
+      "body": "Oxirgi 3 kun davomida sizning glyukoza darajangiz doimiy ravishda yuqori. Tartibingizni muhokama qilish uchun shifokoringiz bilan bog'lanishingizni tavsiya qilamiz."
+    },
+    "logDataReminder": {
+      "title": "Kundalik eslatma",
+      "body": "Salom! Bugungi glyukoza ko'rsatkichingizni va ovqatlanishni kiritishni unutmang. Bu sizga salomatligingizni yaxshiroq kuzatishga yordam beradi."
+    },
+    "positiveReinforcement": {
+      "title": "Ajoyib natija!",
+      "body": "Tabriklaymiz! Sizning ko'rsatkichlaringiz belgilangan maqsadli oraliqda. Xuddi shu ruhda davom eting, siz hammasini to'g'ri qilyapsiz!"
+    },
+    "patternDetectedTip": {
+      "title": "Foydali maslahat",
+      "body": "Sizning glyukozangiz kechki ovqatdan keyin ko'tarilishga moyilligini payqadik. Kechki ovqatlaringiz tarkibini ko'rib chiqish foydali bo'lishi mumkin."
+    }
+  }
+}

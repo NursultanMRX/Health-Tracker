@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Save, Smile, Meh, Frown } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -9,6 +10,7 @@ type Props = {
 
 export default function AddFeelingModal({ onClose, onAdd }: Props) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [moodLevel, setMoodLevel] = useState<number>(3);
   const [note, setNote] = useState('');
   const [timestamp, setTimestamp] = useState(new Date().toISOString().slice(0, 16));
@@ -16,11 +18,11 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
   const [error, setError] = useState('');
 
   const moods = [
-    { level: 1, emoji: '😌', label: 'Very calm', color: 'bg-green-100 border-green-300 text-green-700' },
-    { level: 2, emoji: '🙂', label: 'Calm', color: 'bg-blue-100 border-blue-300 text-blue-700' },
-    { level: 3, emoji: '😐', label: 'Neutral', color: 'bg-gray-100 border-gray-300 text-gray-700' },
-    { level: 4, emoji: '😰', label: 'Stressed', color: 'bg-orange-100 border-orange-300 text-orange-700' },
-    { level: 5, emoji: '😫', label: 'Very stressed', color: 'bg-red-100 border-red-300 text-red-700' },
+    { level: 1, emoji: '😌', label: t('modals.logFeeling.veryCalm'), color: 'bg-green-100 border-green-300 text-green-700' },
+    { level: 2, emoji: '🙂', label: t('modals.logFeeling.calm'), color: 'bg-blue-100 border-blue-300 text-blue-700' },
+    { level: 3, emoji: '😐', label: t('modals.logFeeling.neutral'), color: 'bg-gray-100 border-gray-300 text-gray-700' },
+    { level: 4, emoji: '😰', label: t('modals.logFeeling.stressed'), color: 'bg-orange-100 border-orange-300 text-orange-700' },
+    { level: 5, emoji: '😫', label: t('modals.logFeeling.veryStressed'), color: 'bg-red-100 border-red-300 text-red-700' },
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,7 +63,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">How are you feeling?</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('modals.logFeeling.title')}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -70,7 +72,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-4 text-center">
-              Select your mood
+              {t('modals.logFeeling.selectMoodLabel')}
             </label>
             <div className="flex justify-between gap-2">
               {moods.map((mood) => (
@@ -100,7 +102,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="feeling-timestamp" className="block text-sm font-medium text-gray-700 mb-2">
-              Time
+              {t('common.timeLabel')}
             </label>
             <input
               id="feeling-timestamp"
@@ -113,7 +115,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="feeling-note" className="block text-sm font-medium text-gray-700 mb-2">
-              Note (optional)
+              {t('common.optionalNoteLabel')}
             </label>
             <textarea
               id="feeling-note"
@@ -121,7 +123,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
               onChange={(e) => setNote(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
               rows={3}
-              placeholder="Describe how you're feeling..."
+              placeholder={t('modals.logFeeling.describeFeelingPlaceholder')}
             />
           </div>
 
@@ -137,7 +139,7 @@ export default function AddFeelingModal({ onClose, onAdd }: Props) {
             className="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-medium text-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
-            {saving ? 'Saving...' : 'Save Feeling'}
+            {saving ? 'Saving...' : t('buttons.saveFeeling')}
           </button>
         </form>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Save } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -9,6 +10,7 @@ type Props = {
 
 export default function AddMedicationModal({ onClose, onAdd }: Props) {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [medicationName, setMedicationName] = useState('');
   const [dose, setDose] = useState('');
   const [status, setStatus] = useState<'taken' | 'missed' | 'delayed'>('taken');
@@ -57,7 +59,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-gray-900">Log Medicine</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('modals.logMedicine.title')}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -66,7 +68,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div>
             <label htmlFor="med-name" className="block text-sm font-medium text-gray-700 mb-2">
-              Medication Name
+              {t('modals.logMedicine.medicationNameLabel')}
             </label>
             <input
               id="med-name"
@@ -74,7 +76,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
               value={medicationName}
               onChange={(e) => setMedicationName(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., Metformin"
+              placeholder={t('modals.logMedicine.medicationNamePlaceholder')}
               required
               autoFocus
             />
@@ -82,7 +84,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="dose" className="block text-sm font-medium text-gray-700 mb-2">
-              Dose
+              {t('modals.logMedicine.doseLabel')}
             </label>
             <input
               id="dose"
@@ -90,13 +92,13 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
               value={dose}
               onChange={(e) => setDose(e.target.value)}
               className="w-full px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="e.g., 500 mg"
+              placeholder={t('modals.logMedicine.dosePlaceholder')}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t('modals.logMedicine.statusLabel')}</label>
             <div className="grid grid-cols-3 gap-2">
               {(['taken', 'missed', 'delayed'] as const).map((s) => (
                 <label key={s}>
@@ -109,7 +111,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
                     className="sr-only peer"
                   />
                   <div className="p-3 border-2 border-gray-300 rounded-lg text-center cursor-pointer peer-checked:border-blue-600 peer-checked:bg-blue-50 peer-checked:text-blue-700 hover:border-gray-400 transition-colors capitalize">
-                    {s}
+                    {t(`modals.logMedicine.${s}`)}
                   </div>
                 </label>
               ))}
@@ -145,7 +147,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
 
           <div>
             <label htmlFor="med-timestamp" className="block text-sm font-medium text-gray-700 mb-2">
-              Time
+              {t('common.timeLabel')}
             </label>
             <input
               id="med-timestamp"
@@ -168,7 +170,7 @@ export default function AddMedicationModal({ onClose, onAdd }: Props) {
             className="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-medium text-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
-            {saving ? 'Saving...' : 'Save Medication'}
+            {saving ? 'Saving...' : t('buttons.saveMedication')}
           </button>
         </form>
       </div>
