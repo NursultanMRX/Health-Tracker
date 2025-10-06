@@ -37,7 +37,7 @@ export default function GlucoseChart() {
       }
 
       const response = await fetch(
-        buildApiUrl('/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}'),
+        buildApiUrl(`/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}`),
         {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

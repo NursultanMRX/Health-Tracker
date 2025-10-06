@@ -39,7 +39,7 @@ export default function HealthMetricsCharts() {
 
   const loadMetrics = async () => {
     try {
-      const response = await fetch(buildApiUrl('/health-metrics?patient_id=${user?.id}'), {
+      const response = await fetch(buildApiUrl(`/health-metrics?patient_id=${user?.id}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

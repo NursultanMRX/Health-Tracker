@@ -37,7 +37,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     if (!user) return;
 
     try {
-      const response = await fetch(buildApiUrl('/patient-settings/${user.id}'), {
+      const response = await fetch(buildApiUrl(`/patient-settings/${user.id}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -63,7 +63,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     if (!user || !settings) return;
 
     try {
-      const response = await fetch(buildApiUrl('/patient-settings/${user.id}'), {
+      const response = await fetch(buildApiUrl(`/patient-settings/${user.id}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

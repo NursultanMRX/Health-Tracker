@@ -25,7 +25,7 @@ export default function PatientCharts() {
 
     try {
       const startDate = getDaysAgo(days);
-      const response = await fetch(buildApiUrl('/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}'), {
+      const response = await fetch(buildApiUrl(`/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

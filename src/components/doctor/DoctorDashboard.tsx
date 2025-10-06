@@ -69,7 +69,7 @@ export default function DoctorDashboard() {
         (patientsData || []).map(async (patient: any) => {
           try {
             const glucoseResponse = await fetch(
-              buildApiUrl('/glucose-readings?patient_id=${patient.id}'),
+              buildApiUrl(`/glucose-readings?patient_id=${patient.id}`),
               {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
@@ -80,7 +80,7 @@ export default function DoctorDashboard() {
 
             // Fetch health metrics data to get diabetes risk
             const healthMetricsResponse = await fetch(
-              buildApiUrl('/health-metrics?patient_id=${patient.id}'),
+              buildApiUrl(`/health-metrics?patient_id=${patient.id}`),
               {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

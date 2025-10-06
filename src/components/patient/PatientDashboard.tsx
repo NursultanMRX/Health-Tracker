@@ -95,7 +95,7 @@ export default function PatientDashboard() {
 
   const loadLatestRisk = async () => {
     try {
-      const response = await fetch(buildApiUrl('/health-metrics?patient_id=${user?.id}'), {
+      const response = await fetch(buildApiUrl(`/health-metrics?patient_id=${user?.id}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -116,7 +116,7 @@ export default function PatientDashboard() {
   const loadReadings = async () => {
     try {
       const thirtyDaysAgo = getDaysAgo(30);
-      const response = await fetch(buildApiUrl('/glucose-readings?patient_id=${user?.id}&start_date=${thirtyDaysAgo.toISOString()}'), {
+      const response = await fetch(buildApiUrl(`/glucose-readings?patient_id=${user?.id}&start_date=${thirtyDaysAgo.toISOString()}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

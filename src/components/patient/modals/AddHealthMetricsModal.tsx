@@ -114,7 +114,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
 
       try {
         // Fetch last health metrics for HbA1c
-        const metricsResponse = await fetch(buildApiUrl('/health-metrics?patient_id=${user.id}'), {
+        const metricsResponse = await fetch(buildApiUrl(`/health-metrics?patient_id=${user.id}`), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           },
@@ -133,7 +133,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
         }
 
         // Fetch onboarding data for age, bmi, gender
-        const onboardingResponse = await fetch(buildApiUrl('/onboarding/${user.id}'), {
+        const onboardingResponse = await fetch(buildApiUrl(`/onboarding/${user.id}`), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           },
