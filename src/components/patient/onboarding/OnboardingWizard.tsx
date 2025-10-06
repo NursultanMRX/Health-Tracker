@@ -5,7 +5,7 @@ import Step1BasicInfo from './Step1BasicInfo';
 import Step2PhysicalMeasurements from './Step2PhysicalMeasurements';
 import Step3MedicalHistory from './Step3MedicalHistory';
 import Step4LifestyleMentalHealth from './Step4LifestyleMentalHealth';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../../lib/config';
 
 // Form data type definition
 export type OnboardingFormData = {

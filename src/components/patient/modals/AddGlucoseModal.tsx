@@ -3,7 +3,7 @@ import { X, Save } from 'lucide-react';
 import { sqliteClient } from '../../../lib/sqlite-client';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../../lib/config';
 
 type Props = {
   onClose: () => void;

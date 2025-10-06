@@ -4,7 +4,7 @@ import { useSettings } from '../../contexts/SettingsContext';
 import type { GlucoseReading } from '../../lib/types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { TrendingUp, Calendar } from 'lucide-react';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 // GlucoseChart - A large, clean chart showing glucose trends
 // Design: Main visual with 24h/7d/30d view options for different time ranges

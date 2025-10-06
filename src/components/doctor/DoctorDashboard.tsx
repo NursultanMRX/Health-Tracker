@@ -7,7 +7,7 @@ import { Search, Users, Activity, AlertCircle, LayoutGrid, List, Filter } from '
 import PatientDetailView from './PatientDetailView';
 import PatientCard from './PatientCard';
 import ProfileDropdown from '../common/ProfileDropdown';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 type PatientWithAlerts = Profile & {
   hasActiveAlerts?: boolean;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Bell, BellOff, AlertTriangle, TrendingUp, Info, Heart } from 'lucide-react';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 interface NotificationSettings {
   preferred_language: string;

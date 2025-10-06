@@ -6,7 +6,7 @@ import { calculateTIR, calculateAverage, getDaysAgo, formatDate } from '../../li
 import { TrendingUp, Calendar } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Legend } from 'recharts';
 import HealthMetricsCharts from './HealthMetricsCharts';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 export default function PatientCharts() {
   const { user } = useAuth();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, Bell, Settings, AlertTriangle, TrendingUp, Heart, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 interface Notification {
   id: string;

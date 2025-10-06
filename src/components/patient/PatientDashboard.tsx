@@ -19,7 +19,7 @@ import GlucoseChart from './GlucoseChart';
 import ProfileDropdown from '../common/ProfileDropdown';
 import NotificationPanel from './NotificationPanel';
 import NotificationSettingsModal from './NotificationSettingsModal';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../lib/config';
 
 type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'health_metrics' | 'settings' | 'voice_input' | null;
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { X, Save } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../../lib/config';
 
 type Props = {
   onClose: () => void;

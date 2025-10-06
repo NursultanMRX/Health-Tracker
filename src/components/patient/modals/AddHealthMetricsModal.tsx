@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, Brain } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { buildApiUrl } from '../lib/config';
+import { buildApiUrl } from '../../../lib/config';
 
 type AddHealthMetricsModalProps = {
   onClose: () => void;
