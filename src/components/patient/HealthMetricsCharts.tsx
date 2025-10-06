@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { buildApiUrl } from '../lib/config';
 
 type HealthMetric = {
   id: string;
@@ -38,7 +39,7 @@ export default function HealthMetricsCharts() {
 
   const loadMetrics = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/health-metrics?patient_id=${user?.id}`, {
+      const response = await fetch(buildApiUrl('/health-metrics?patient_id=${user?.id}'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

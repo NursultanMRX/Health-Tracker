@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { X, Activity, Utensils, Moon, Briefcase, Smartphone, Users, Smile, Droplets, Heart, Brain } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { buildApiUrl } from '../lib/config';
 
 type AddHealthMetricsModalProps = {
   onClose: () => void;
@@ -70,7 +71,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
 
       try {
         // Use proxy endpoint through our backend to avoid CORS issues
-        const response = await fetch('http://localhost:3001/api/autofill/user_B', {
+        const response = await fetch(buildApiUrl('/autofill/user_B'), {
           method: 'GET',
           headers: {
             'Accept': 'application/json',
@@ -113,7 +114,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
 
       try {
         // Fetch last health metrics for HbA1c
-        const metricsResponse = await fetch(`http://localhost:3001/api/health-metrics?patient_id=${user.id}`, {
+        const metricsResponse = await fetch(buildApiUrl('/health-metrics?patient_id=${user.id}'), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           },
@@ -132,7 +133,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
         }
 
         // Fetch onboarding data for age, bmi, gender
-        const onboardingResponse = await fetch(`http://localhost:3001/api/onboarding/${user.id}`, {
+        const onboardingResponse = await fetch(buildApiUrl('/onboarding/${user.id}'), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
           },
@@ -240,7 +241,7 @@ export default function AddHealthMetricsModal({ onClose, onAdd, voiceData }: Add
       }
 
       // Save to database with prediction results
-      const response = await fetch('http://localhost:3001/api/health-metrics', {
+      const response = await fetch(buildApiUrl('/health-metrics'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Activity } from 'lucide-react';
+import { buildApiUrl } from '../lib/config';
 
 export default function AuthScreen() {
   const { signIn, signUp } = useAuth();
@@ -25,7 +26,7 @@ export default function AuthScreen() {
 
   const loadDoctors = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/doctors');
+      const response = await fetch(buildApiUrl('/doctors'));
       if (response.ok) {
         const data = await response.json();
         setDoctors(data);

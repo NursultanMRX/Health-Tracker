@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X, Save } from 'lucide-react';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { buildApiUrl } from '../lib/config';
 
 type Props = {
   onClose: () => void;
@@ -27,7 +28,7 @@ export default function AddMealModal({ onClose, onAdd }: Props) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:3001/api/meals', {
+      const response = await fetch(buildApiUrl('/meals'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

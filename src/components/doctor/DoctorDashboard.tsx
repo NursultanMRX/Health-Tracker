@@ -7,6 +7,7 @@ import { Search, Users, Activity, AlertCircle, LayoutGrid, List, Filter } from '
 import PatientDetailView from './PatientDetailView';
 import PatientCard from './PatientCard';
 import ProfileDropdown from '../common/ProfileDropdown';
+import { buildApiUrl } from '../lib/config';
 
 type PatientWithAlerts = Profile & {
   hasActiveAlerts?: boolean;
@@ -38,7 +39,7 @@ export default function DoctorDashboard() {
   const loadPatients = async () => {
     try {
       // Load all patients
-      const response = await fetch('http://localhost:3001/api/profiles?role=patient', {
+      const response = await fetch(buildApiUrl('/profiles?role=patient'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -54,7 +55,7 @@ export default function DoctorDashboard() {
       );
 
       // Load clinical alerts
-      const alertsResponse = await fetch('http://localhost:3001/api/clinical-alerts?status=active', {
+      const alertsResponse = await fetch(buildApiUrl('/clinical-alerts?status=active'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -68,7 +69,7 @@ export default function DoctorDashboard() {
         (patientsData || []).map(async (patient: any) => {
           try {
             const glucoseResponse = await fetch(
-              `http://localhost:3001/api/glucose-readings?patient_id=${patient.id}`,
+              buildApiUrl('/glucose-readings?patient_id=${patient.id}'),
               {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
@@ -79,7 +80,7 @@ export default function DoctorDashboard() {
 
             // Fetch health metrics data to get diabetes risk
             const healthMetricsResponse = await fetch(
-              `http://localhost:3001/api/health-metrics?patient_id=${patient.id}`,
+              buildApiUrl('/health-metrics?patient_id=${patient.id}'),
               {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

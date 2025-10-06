@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { X, Bell, BellOff, AlertTriangle, TrendingUp, Info, Heart } from 'lucide-react';
+import { buildApiUrl } from '../lib/config';
 
 interface NotificationSettings {
   preferred_language: string;
@@ -42,7 +43,7 @@ export default function NotificationSettingsModal({ isOpen, onClose }: Notificat
   const loadSettings = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/notifications/settings', {
+      const response = await fetch(buildApiUrl('/notifications/settings'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -62,7 +63,7 @@ export default function NotificationSettingsModal({ isOpen, onClose }: Notificat
   const saveSettings = async () => {
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:3001/api/notifications/settings', {
+      const response = await fetch(buildApiUrl('/notifications/settings'), {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,

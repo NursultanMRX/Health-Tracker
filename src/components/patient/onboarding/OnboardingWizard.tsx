@@ -5,6 +5,7 @@ import Step1BasicInfo from './Step1BasicInfo';
 import Step2PhysicalMeasurements from './Step2PhysicalMeasurements';
 import Step3MedicalHistory from './Step3MedicalHistory';
 import Step4LifestyleMentalHealth from './Step4LifestyleMentalHealth';
+import { buildApiUrl } from '../lib/config';
 
 // Form data type definition
 export type OnboardingFormData = {
@@ -110,7 +111,7 @@ export default function OnboardingWizard({ onComplete }: Props) {
       }
 
       // Save onboarding data to the database
-      const response = await fetch('http://localhost:3001/api/onboarding', {
+      const response = await fetch(buildApiUrl('/onboarding'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

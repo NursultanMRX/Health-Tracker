@@ -6,6 +6,7 @@ import { calculateTIR, calculateAverage, getDaysAgo, formatDate } from '../../li
 import { TrendingUp, Calendar } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Cell, Legend } from 'recharts';
 import HealthMetricsCharts from './HealthMetricsCharts';
+import { buildApiUrl } from '../lib/config';
 
 export default function PatientCharts() {
   const { user } = useAuth();
@@ -24,7 +25,7 @@ export default function PatientCharts() {
 
     try {
       const startDate = getDaysAgo(days);
-      const response = await fetch(`http://localhost:3001/api/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}`, {
+      const response = await fetch(buildApiUrl('/glucose-readings?patient_id=${user.id}&start_date=${startDate.toISOString()}'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

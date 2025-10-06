@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X, Bell, Settings, AlertTriangle, TrendingUp, Heart, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { buildApiUrl } from '../lib/config';
 
 interface Notification {
   id: string;
@@ -66,7 +67,7 @@ export default function NotificationPanel({ isOpen, onClose, onSettingsClick }: 
   const loadNotifications = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3001/api/notifications/history?limit=20', {
+      const response = await fetch(buildApiUrl('/notifications/history?limit=20'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },

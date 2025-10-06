@@ -19,6 +19,7 @@ import GlucoseChart from './GlucoseChart';
 import ProfileDropdown from '../common/ProfileDropdown';
 import NotificationPanel from './NotificationPanel';
 import NotificationSettingsModal from './NotificationSettingsModal';
+import { buildApiUrl } from '../lib/config';
 
 type ModalType = 'glucose' | 'meal' | 'activity' | 'medication' | 'feeling' | 'health_metrics' | 'settings' | 'voice_input' | null;
 
@@ -71,7 +72,7 @@ export default function PatientDashboard() {
 
   const loadNotificationCount = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/notifications/history?limit=100`, {
+      const response = await fetch(buildApiUrl('/notifications/history?limit=100'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -94,7 +95,7 @@ export default function PatientDashboard() {
 
   const loadLatestRisk = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/health-metrics?patient_id=${user?.id}`, {
+      const response = await fetch(buildApiUrl('/health-metrics?patient_id=${user?.id}'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -115,7 +116,7 @@ export default function PatientDashboard() {
   const loadReadings = async () => {
     try {
       const thirtyDaysAgo = getDaysAgo(30);
-      const response = await fetch(`http://localhost:3001/api/glucose-readings?patient_id=${user?.id}&start_date=${thirtyDaysAgo.toISOString()}`, {
+      const response = await fetch(buildApiUrl('/glucose-readings?patient_id=${user?.id}&start_date=${thirtyDaysAgo.toISOString()}'), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
