@@ -1,7 +1,7 @@
 // API Configuration
 export const API_CONFIG = {
-  // Get API URL from environment variable or default to localhost
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:3001/api',
+  // Get API URL from environment variable or default to production backend
+  BASE_URL: import.meta.env.VITE_API_URL || 'https://health-tracker-production-598b.up.railway.app/api',
   
   // API endpoints
   ENDPOINTS: {
