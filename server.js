@@ -21,6 +21,13 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
+// Debug logging for Railway
+console.log('🔍 Environment Check:');
+console.log('  - NODE_ENV:', process.env.NODE_ENV);
+console.log('  - PORT (from env):', process.env.PORT);
+console.log('  - PORT (parsed):', PORT);
+console.log('  - CORS_ORIGIN:', CORS_ORIGIN);
+
 // Middleware
 app.use(cors({
   origin: [
@@ -1336,10 +1343,17 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Bind to 0.0.0.0 for Railway/cloud hosting
-const HOST = process.env.HOST || '0.0.0.0';
+const HOST = '0.0.0.0';
 
-app.listen(PORT, HOST, () => {
-  console.log(`✓ Server running on http://${HOST}:${PORT}`);
-  console.log(`✓ Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`✓ CORS Origin: ${CORS_ORIGIN}`);
+const server = app.listen(PORT, HOST, () => {
+  console.log(`\n🚀 Server started successfully!`);
+  console.log(`  - Listening on: http://${HOST}:${PORT}`);
+  console.log(`  - Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`  - CORS Origin: ${CORS_ORIGIN}`);
+  console.log(`  - Process ID: ${process.pid}`);
+});
+
+server.on('error', (error) => {
+  console.error('❌ Server error:', error);
+  process.exit(1);
 });
