@@ -1,0 +1,17 @@
+# Alternative Nixpacks configuration for Railway.app
+# This uses a more generic approach that should work with most nixpkgs versions
+
+[phases.setup]
+nixPkgs = ["nodejs_18", "python3", "gcc", "gnumake"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"
+
+[variables]
+NODE_ENV = "production"
