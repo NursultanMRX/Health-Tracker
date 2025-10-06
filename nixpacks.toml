@@ -1,0 +1,17 @@
+# Nixpacks configuration for Railway.app
+# This ensures Node.js 20 is used for building and running
+
+[phases.setup]
+nixPkgs = ["nodejs-20_x", "python3", "gcc", "gnumake"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"
+
+[variables]
+NODE_ENV = "production"
