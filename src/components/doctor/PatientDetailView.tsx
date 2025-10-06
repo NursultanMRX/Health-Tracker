@@ -28,7 +28,9 @@ type Props = {
   onBack: () => void;
 };
 
-const API_URL = 'http://localhost:3001/api';
+import { API_CONFIG } from '../../lib/config';
+
+const API_URL = API_CONFIG.BASE_URL;
 
 export default function PatientDetailView({ patient, onBack }: Props) {
   const { t } = useTranslation();
