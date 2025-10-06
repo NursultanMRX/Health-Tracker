@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { sqliteClient } from '../lib/sqlite-client';
 import type { Profile } from '../lib/types';
+import { buildApiUrl } from '../lib/config';
 
 type User = {
   id: string;
@@ -57,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = async (userId: string) => {
     try {
       // Fetch profile directly from the API
-      const response = await fetch(`http://localhost:3001/api/profiles/${userId}`, {
+      const response = await fetch(buildApiUrl(`/profiles/${userId}`), {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
         },
@@ -147,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     try {
       // Make direct API call to update profile completion
-      const response = await fetch(`http://localhost:3001/api/profiles/${user.id}`, {
+      const response = await fetch(buildApiUrl(`/profiles/${user.id}`), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
