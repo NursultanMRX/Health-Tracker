@@ -17,36 +17,44 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-// Railway provides PORT via environment variable - must use it!
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
 
-// Debug logging for Railway
 console.log('🔍 Environment Check:');
 console.log('  - NODE_ENV:', process.env.NODE_ENV);
 console.log('  - PORT (from env):', process.env.PORT);
 console.log('  - PORT (parsed):', PORT);
 console.log('  - CORS_ORIGIN:', CORS_ORIGIN);
 
+// Allow all *.onrender.com origins plus explicit origins
+const ALLOWED_ORIGINS = [
+  CORS_ORIGIN,
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
+  'http://localhost:5177',
+  'http://localhost:5178',
+  'http://localhost:5179',
+  'https://health-tracker-production-598b.up.railway.app',
+];
+
 // Middleware
 app.use(cors({
-  origin: [
-    CORS_ORIGIN, 
-    'http://localhost:5173',
-    'http://localhost:5174', 
-    'http://localhost:5175', 
-    'http://localhost:5176', 
-    'http://localhost:5177', 
-    'http://localhost:5178', 
-    'http://localhost:5179',
-    'https://health-tracker-production-598b.up.railway.app'
-  ],
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin) || /\.onrender\.com$/.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
 
-// Initialize SQLite database
-const db = new Database(path.join(__dirname, 'diabetes.db'), { readonly: false, fileMustExist: false });
+// Initialize SQLite database — DB_PATH lets Render Persistent Disk be used
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'diabetes.db');
+const db = new Database(DB_PATH, { readonly: false, fileMustExist: false });
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
 

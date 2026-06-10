@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: health-tracker
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: NODE_ENV=production node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        value: https://health-tracker.onrender.com   # update if Render gives a different URL
+      - key: DB_PATH
+        value: /data/diabetes.db                      # used only if you add a Persistent Disk
+    # Uncomment the section below if you upgrade to a paid plan for persistent data:
+    # disk:
+    #   name: health-tracker-data
+    #   mountPath: /data
+    #   sizeGB: 1
