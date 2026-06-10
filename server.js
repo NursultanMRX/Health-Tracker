@@ -54,8 +54,13 @@ app.use(cors({
 app.use(express.json());
 
 // Initialize SQLite database — DB_PATH lets Render Persistent Disk be used
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'diabetes.db');
-fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+let DB_PATH = process.env.DB_PATH || path.join(__dirname, 'diabetes.db');
+try {
+  fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
+} catch {
+  console.warn(`⚠️  Cannot use DB_PATH=${DB_PATH}, falling back to local diabetes.db`);
+  DB_PATH = path.join(__dirname, 'diabetes.db');
+}
 const db = new Database(DB_PATH, { readonly: false, fileMustExist: false });
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
