@@ -91,7 +91,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (email: string, password: string, fullName: string, role: 'patient' | 'doctor', age?: string, gender?: 'male' | 'female', assignedDoctorId?: string) => {
-    const { error } = await sqliteClient.auth.signUp(
+    const { data, error } = await sqliteClient.auth.signUp(
       { email, password },
       fullName,
       role,
@@ -101,6 +101,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
 
     if (error) throw error;
+
+    // Set user and load profile immediately after sign-up
+    if (data.user) {
+      setUser(data.user as User);
+      await loadProfile(data.user.id);
+    }
   };
 
   const signIn = async (email: string, password: string) => {

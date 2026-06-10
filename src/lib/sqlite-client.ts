@@ -32,11 +32,12 @@ export const auth = {
 
     // Store the auth token (now returned by signup endpoint)
     if (data.session?.token) {
-      authToken = data.session.token;
+      authToken = data.session.token as string;
       localStorage.setItem('auth_token', authToken);
     }
 
-    return { data, error: null };
+    // Return user data so AuthContext can set it
+    return { data: { user: data.user }, error: null };
   },
 
   signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
@@ -50,7 +51,7 @@ export const auth = {
     if (!response.ok) throw new Error(data.error || 'Signin failed');
 
     // Store the auth token
-    authToken = data.session.token;
+    authToken = data.session.token as string;
     localStorage.setItem('auth_token', authToken);
 
     return { data, error: null };
