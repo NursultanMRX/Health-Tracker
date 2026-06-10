@@ -4,6 +4,7 @@ import Database from 'better-sqlite3';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
@@ -54,6 +55,7 @@ app.use(express.json());
 
 // Initialize SQLite database — DB_PATH lets Render Persistent Disk be used
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'diabetes.db');
+fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 const db = new Database(DB_PATH, { readonly: false, fileMustExist: false });
 db.pragma('foreign_keys = ON');
 db.pragma('journal_mode = WAL');
