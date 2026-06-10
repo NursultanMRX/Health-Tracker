@@ -3,7 +3,7 @@ services:
     name: health-tracker
     runtime: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: NODE_ENV=production node server.js
     envVars:
       - key: NODE_ENV
